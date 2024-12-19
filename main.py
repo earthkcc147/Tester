@@ -63,7 +63,14 @@ def place_order(category, product_key, quantity, link):
         print(f"จำนวนสินค้าต้องอยู่ระหว่าง {min_quantity} ถึง {max_quantity} ชิ้น ❌")
         return
 
-    total_price = round(product['price_per_unit'] * quantity, 2)
+    # คำนวณราคาตาม price_per_rate และ rate
+    if 'price_per_rate' in product:
+        price_per_rate = product['price_per_rate']
+        rate = product['rate']
+        total_price = round(price_per_rate * quantity * rate, 2)
+    else:
+        price_per_rate = product['price_per_unit']
+        total_price = round(price_per_rate * quantity, 2)
 
     balance = get_balance(api_key)
     if balance is None:
@@ -81,7 +88,7 @@ def place_order(category, product_key, quantity, link):
     print(f"\n--- รายละเอียดการสั่งซื้อ ---")
     print(f"สินค้า: {product['description']}")
     print(f"จำนวนที่เลือก: {quantity} ชิ้น")
-    print(f"ราคาต่อหน่วย: {product['price_per_unit']:.2f} บาท")
+    print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท (rate: {rate})")
     print(f"ราคาทั้งหมด: {total_price:.2f} บาท")
     print(f"ลิงก์ที่กรอก: {link}")
     print(f"ยอดเงินที่คุณมีหลังจากคูณ: {adjusted_balance:.2f} บาท 💳")
