@@ -28,7 +28,6 @@ except json.JSONDecodeError:
 
 # ฟังก์ชันสำหรับส่งข้อความไปยัง Line Group
 def send_line_message(message):
-    line_api_url = "https://api.line.me/v2/bot/message/push"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + os.getenv('LINE_ACCESS_TOKEN')  # ใช้ Access Token จาก .env
@@ -41,7 +40,7 @@ def send_line_message(message):
         }]
     }
     try:
-        response = requests.post(line_api_url, headers=headers, json=data)
+        response = requests.post(LINE_API_URL, headers=headers, json=data)
         if response.status_code == 200:
             print("ข้อความส่งไปยัง Line Group สำเร็จ ✅")
         else:
