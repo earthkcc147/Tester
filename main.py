@@ -194,7 +194,7 @@ while True:
             choose_product("discord")
         elif category_choice == 99:
             print("กำลังเปิดแชทกับแอดมิน...")
-            webbrowser.open("https://m.me/earthkcc147")
+            webbrowser.open("https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
         else:
             print("ตัวเลือกไม่ถูกต้อง ❌")
     except ValueError:
