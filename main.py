@@ -43,33 +43,31 @@ def login_screen():
     print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก\n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL\n")
     print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 
+# ฟังก์ชันสำหรับล็อคอิน
+def login():
+    # แสดงหน้าล็อคอิน
+    login_screen()
 
-# เรียกใช้ฟังก์ชันเคลียร์คอนโซล
-clear_console()
-# แสดงหน้าล็อคอิน
-login_screen()
+    # รับ username และ password จากผู้ใช้
+    username = input(Fore.YELLOW + "กรุณากรอก Username: ")
+    # รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
+    password = getpass(Fore.YELLOW + "กรุณากรอก Password: ")
 
-# รับ username และ password จากผู้ใช้
-username = input(Fore.YELLOW + "กรุณากรอก Username: ")
-# รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
-password = getpass(Fore.YELLOW + "กรุณากรอก Password: ")
+    # ตรวจสอบ username และ password
+    if username not in users_data or users_data[username]['password'] != password:
+        print(Fore.RED + "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌")
+        exit()
 
-# password = input(Fore.YELLOW + "กรุณากรอก Password: ")
+    # ดึงข้อมูลผู้ใช้ปัจจุบัน
+    current_user = users_data[username]
+    api_key = current_user['api_key']
+    products = current_user['products']
+    BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
 
-# ตรวจสอบ username และ password
-if username not in users_data or users_data[username]['password'] != password:
-    print(Fore.RED + "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌")
-    exit()
+    # แสดงข้อความต้อนรับ
+    print_welcome_message(username)
 
-# ดึงข้อมูลผู้ใช้ปัจจุบัน
-current_user = users_data[username]
-api_key = current_user['api_key']
-products = current_user['products']
-BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
-
-# แสดงข้อความต้อนรับ
-print_welcome_message(username)
-
+    return current_user, api_key, products, BM
 
 # ฟังก์ชันดึงยอดเงินจาก API
 def get_balance(api_k):
@@ -160,41 +158,6 @@ def place_order(category, product_key, quantity, link):
     except requests.RequestException as e:
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
 
-# ฟังก์ชันเลือกสินค้า
-def choose_product(category):
-    if category not in products:
-        print("ไม่มีสินค้าในหมวดหมู่นี้ ❌")
-        return
-
-    category_products = products[category]
-    print("\n--- รายการสินค้า ---")
-    for index, (product_name, details) in enumerate(category_products.items(), start=1):
-        print(f"{index}. {details['description']} - ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']}")
-        print(f"   จำนวนขั้นต่ำ: {details['min_quantity']} - จำนวนสูงสุด: {details['max_quantity']}")
-        if 'example_link' in details:
-            print(f"   ตัวอย่างลิงก์: {details['example_link']}")
-
-    print("0. ย้อนกลับ 🔙")
-
-    choice = int(input("กรุณาเลือกสินค้าที่ต้องการ: "))
-    if choice == 0:
-        return
-
-    if 1 <= choice <= len(category_products):
-        product_key = list(category_products.keys())[choice - 1]
-        product = category_products[product_key]
-        print(f"คุณเลือก {product['description']}")
-
-        min_quantity = product['min_quantity']
-        max_quantity = product['max_quantity']
-        price_per_rate = product['price_per_rate']
-        print(f"จำนวนขั้นต่ำ: {min_quantity}, จำนวนสูงสุด: {max_quantity}")
-        print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท")
-
-        link = input(f"กรุณากรอกลิงก์ที่ต้องการ (ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): ")
-        quantity = int(input(f"กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {min_quantity} และ {max_quantity}): "))
-        place_order(category, product_key, quantity, link)
-
 # เมนูหลัก
 def show_category_menu():
     balance = get_balance(api_key)
@@ -213,6 +176,9 @@ def show_category_menu():
 
 # ลูปหลัก
 while True:
+    # เรียกใช้ฟังก์ชัน login และดึงข้อมูลผู้ใช้
+    current_user, api_key, products, BM = login()
+
     show_category_menu()
     try:
         category_choice = int(input("กรุณาเลือกหมวดหมู่สินค้า: "))
