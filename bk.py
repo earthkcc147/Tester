@@ -23,6 +23,13 @@ except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
 
+def clear_console():
+    # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Linux หรือ macOS หรือ Termux
+        os.system('clear')
+
 # ฟังก์ชันตกแต่งข้อความ
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
@@ -33,10 +40,12 @@ def login_screen():
     print(Fore.CYAN + "="*40)
     print(Fore.MAGENTA + Style.BRIGHT + "         ระบบล็อคอิน")
     print(Fore.CYAN + "="*40)
-    print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก/n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+    print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก\n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL\n")
     print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 
 
+# เรียกใช้ฟังก์ชันเคลียร์คอนโซล
+clear_console()
 # แสดงหน้าล็อคอิน
 login_screen()
 
