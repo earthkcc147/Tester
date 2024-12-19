@@ -15,6 +15,7 @@ load_dotenv()
 
 # อ่านค่าจาก .env
 API_URL = os.getenv("API_URL")
+LINE_API_URL = os.getenv('LINE_API_URL')
 USERS_JSON = os.getenv("USERS")
 
 # แปลงข้อมูล USERS_JSON เป็น dictionary
