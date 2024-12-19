@@ -3,6 +3,10 @@ import json
 import requests
 import webbrowser
 from dotenv import load_dotenv
+from colorama import init, Fore, Style
+
+# เริ่มต้น colorama
+init(autoreset=True)
 
 # โหลดค่าจากไฟล์ .env
 load_dotenv()
