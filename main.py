@@ -40,7 +40,10 @@ login_screen()
 
 # รับ username และ password จากผู้ใช้
 username = input(Fore.YELLOW + "กรุณากรอก Username: ")
-password = input(Fore.YELLOW + "กรุณากรอก Password: ")
+# รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
+password = getpass(Fore.YELLOW + "กรุณากรอก Password: ")
+
+# password = input(Fore.YELLOW + "กรุณากรอก Password: ")
 
 # ตรวจสอบ username และ password
 if username not in users_data or users_data[username]['password'] != password:
