@@ -6,6 +6,13 @@ from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 
+def clear_console():
+    # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Linux หรือ macOS หรือ Termux
+        os.system('clear')
+
 # เริ่มต้น colorama
 init(autoreset=True)
 
@@ -37,6 +44,8 @@ def login_screen():
     print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 
 
+# เรียกใช้ฟังก์ชันเคลียร์คอนโซล
+clear_console()
 # แสดงหน้าล็อคอิน
 login_screen()
 
