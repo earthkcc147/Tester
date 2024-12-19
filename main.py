@@ -5,6 +5,7 @@ import webbrowser
 from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
+import datetime
 
 # เริ่มต้น colorama
 init(autoreset=True)
@@ -22,6 +23,30 @@ try:
 except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
+
+
+# ฟังก์ชันสำหรับส่งข้อความไปยัง Line Group
+def send_line_message(message):
+    line_api_url = "https://api.line.me/v2/bot/message/push"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + os.getenv('LINE_ACCESS_TOKEN')  # ใช้ Access Token จาก .env
+    }
+    data = {
+        "to": os.getenv('LINE_GROUP_ID'),  # ใช้ Group ID จาก .env
+        "messages": [{
+            "type": "text",
+            "text": message
+        }]
+    }
+    try:
+        response = requests.post(line_api_url, headers=headers, json=data)
+        if response.status_code == 200:
+            print("ข้อความส่งไปยัง Line Group สำเร็จ ✅")
+        else:
+            print("ไม่สามารถส่งข้อความไปยัง Line Group ได้ ❌")
+    except requests.RequestException as e:
+        print(f"เกิดข้อผิดพลาดในการส่งข้อความไปยัง Line: {e} ❌")
 
 def clear_console():
     # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
