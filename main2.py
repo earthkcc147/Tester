@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 # โหลดค่าจากไฟล์ .env
 load_dotenv()
 
-BM = float(os.getenv("BM", 100))  # เปลี่ยนชื่อจาก BALANCE_MULTIPLIER เป็น BM
+# ดึงค่า BM จากข้อมูลของสมาชิกที่ล็อกอิน
+BM = float(current_user.get("BM", 100))  # ค่าเริ่มต้นคือ 100 หากไม่ได้ระบุใน .env
 
 # อ่านค่าจาก .env
 API_URL = os.getenv("API_URL")
