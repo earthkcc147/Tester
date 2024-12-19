@@ -30,16 +30,17 @@ if username not in users_data or users_data[username]['password'] != password:
 current_user = users_data[username]
 api_key = current_user['api_key']
 products = current_user['products']
-user_bm = float(current_user.get('BM', 100))  # ค่า BM เฉพาะของผู้ใช้ (ค่าเริ่มต้น 100)
+BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
 
 print(f"ยินดีต้อนรับ {username}! ✅")
 
 # ฟังก์ชันดึงยอดเงินจาก API
 def get_balance(api_k):
     data_balance = {
-        "key": api_k,
+        "key": api_key,
         "action": "balance"
     }
+
     try:
         response_balance = requests.post(API_URL, data=data_balance)
         if response_balance.status_code == 200:
@@ -56,14 +57,16 @@ def place_order(category, product_key, quantity, link):
     min_quantity = product['min_quantity']
     max_quantity = product['max_quantity']
 
+    # ตรวจสอบว่าจำนวนสินค้าที่เลือกอยู่ในช่วงที่อนุญาต
     if quantity < min_quantity or quantity > max_quantity:
         print(f"จำนวนสินค้าต้องอยู่ระหว่าง {min_quantity} ถึง {max_quantity} ชิ้น ❌")
         return
 
+    # คำนวณราคาตาม price_per_rate และ rate
     if 'price_per_rate' in product:
         price_per_rate = product['price_per_rate']
         rate = product['rate']
-        total_price = round(price_per_rate * user_bm / rate * quantity, 2)
+        total_price = round(price_per_rate * BM / rate * quantity, 2)
     else:
         price_per_rate = product['price_per_unit']
         total_price = round(price_per_rate * quantity, 2)
@@ -73,12 +76,14 @@ def place_order(category, product_key, quantity, link):
         print("ไม่สามารถดึงยอดเงินได้ ❌")
         return
 
-    adjusted_balance = round(balance * user_bm, 2)
+    # คูณยอดเงินด้วยตัวคูณ
+    adjusted_balance = round(balance * BM, 2)
 
     if total_price > adjusted_balance:
         print(f"ยอดเงินไม่เพียงพอในการซื้อสินค้า {product['description']} ❌")
         return
 
+    # แสดงรายละเอียดการสั่งซื้อให้ผู้ใช้ยืนยัน
     print(f"\n--- รายละเอียดการสั่งซื้อ ---")
     print(f"สินค้า: {product['description']}")
     print(f"จำนวนที่เลือก: {quantity} ชิ้น")
@@ -87,11 +92,13 @@ def place_order(category, product_key, quantity, link):
     print(f"ลิงก์ที่กรอก: {link}")
     print(f"ยอดเงินที่คุณมีหลังจากคูณ: {adjusted_balance:.2f} บาท 💳")
 
+    # การยืนยันการสั่งซื้อ
     confirm = input("คุณต้องการยืนยันการสั่งซื้อหรือไม่? (y/n): ").lower()
     if confirm != 'y':
         print("ยกเลิกการสั่งซื้อ ❌")
         return
 
+    # ข้อมูลการสั่งซื้อที่ต้องการส่งไปยัง API
     data_order = {
         "key": api_key,
         "action": "add",
@@ -116,11 +123,46 @@ def place_order(category, product_key, quantity, link):
     except requests.RequestException as e:
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
 
+# ฟังก์ชันเลือกสินค้า
+def choose_product(category):
+    if category not in products:
+        print("ไม่มีสินค้าในหมวดหมู่นี้ ❌")
+        return
+
+    category_products = products[category]
+    print("\n--- รายการสินค้า ---")
+    for index, (product_name, details) in enumerate(category_products.items(), start=1):
+        print(f"{index}. {details['description']} - ราคาต่อหน่วย: {details['price_per_rate']:.2f} บาท")
+        print(f"   จำนวนขั้นต่ำ: {details['min_quantity']} - จำนวนสูงสุด: {details['max_quantity']}")
+        if 'example_link' in details:
+            print(f"   ตัวอย่างลิงก์: {details['example_link']}")
+
+    print("0. ย้อนกลับ 🔙")
+
+    choice = int(input("กรุณาเลือกสินค้าที่ต้องการ: "))
+    if choice == 0:
+        return
+
+    if 1 <= choice <= len(category_products):
+        product_key = list(category_products.keys())[choice - 1]
+        product = category_products[product_key]
+        print(f"คุณเลือก {product['description']}")
+
+        min_quantity = product['min_quantity']
+        max_quantity = product['max_quantity']
+        price_per_rate = product['price_per_rate']
+        print(f"จำนวนขั้นต่ำ: {min_quantity}, จำนวนสูงสุด: {max_quantity}")
+        print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท")
+
+        link = input(f"กรุณากรอกลิงก์ที่ต้องการ (ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): ")
+        quantity = int(input(f"กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {min_quantity} และ {max_quantity}): "))
+        place_order(category, product_key, quantity, link)
+
 # เมนูหลัก
 def show_category_menu():
     balance = get_balance(api_key)
     if balance is not None:
-        adjusted_balance = round(balance * user_bm, 2)
+        adjusted_balance = round(balance * BM, 2)
         print(f"\n--- เมนูหลัก --- ยอดเงิน: {adjusted_balance:.2f} บาท 💳")
     else:
         print("\n--- เมนูหลัก --- ไม่สามารถดึงยอดเงินได้ ❗")
