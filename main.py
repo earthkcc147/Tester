@@ -19,16 +19,31 @@ USERS_JSON = os.getenv("USERS")
 try:
     users_data = json.loads(USERS_JSON)
 except json.JSONDecodeError:
-    print("ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
+    print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
 
+# ฟังก์ชันตกแต่งข้อความ
+def print_welcome_message(username):
+    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!")
+    print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+
+# สร้างหน้าจอล็อคอินที่สวยงาม
+def login_screen():
+    print(Fore.CYAN + "="*40)
+    print(Fore.MAGENTA + Style.BRIGHT + "         ระบบล็อคอิน")
+    print(Fore.CYAN + "="*40)
+    print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ\n")
+
+# แสดงหน้าล็อคอิน
+login_screen()
+
 # รับ username และ password จากผู้ใช้
-username = input("กรุณากรอก Username: ")
-password = input("กรุณากรอก Password: ")
+username = input(Fore.YELLOW + "กรุณากรอก Username: ")
+password = input(Fore.YELLOW + "กรุณากรอก Password: ")
 
 # ตรวจสอบ username และ password
 if username not in users_data or users_data[username]['password'] != password:
-    print("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌")
+    print(Fore.RED + "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌")
     exit()
 
 # ดึงข้อมูลผู้ใช้ปัจจุบัน
@@ -37,7 +52,9 @@ api_key = current_user['api_key']
 products = current_user['products']
 BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
 
-print(f"ยินดีต้อนรับ {username}! ✅")
+# แสดงข้อความต้อนรับ
+print_welcome_message(username)
+
 
 # ฟังก์ชันดึงยอดเงินจาก API
 def get_balance(api_k):
