@@ -39,7 +39,6 @@ def print_welcome_message(username):
 def login_screen():
     print(Fore.CYAN + "="*40)
     print(Fore.MAGENTA + Style.BRIGHT + "         ระบบล็อคอิน")
-    print(Fore.CYAN + "="*40)
     print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก\n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL\n")
     print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 
@@ -53,6 +52,7 @@ login_screen()
 username = input(Fore.YELLOW + "กรุณากรอก Username: ")
 # รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
 password = getpass(Fore.YELLOW + "กรุณากรอก Password: ")
+print(Fore.CYAN + "="*40)
 
 # password = input(Fore.YELLOW + "กรุณากรอก Password: ")
 
