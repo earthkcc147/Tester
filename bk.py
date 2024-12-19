@@ -25,7 +25,7 @@ except json.JSONDecodeError:
 
 # ฟังก์ชันตกแต่งข้อความ
 def print_welcome_message(username):
-    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!")
+    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
@@ -33,7 +33,9 @@ def login_screen():
     print(Fore.CYAN + "="*40)
     print(Fore.MAGENTA + Style.BRIGHT + "         ระบบล็อคอิน")
     print(Fore.CYAN + "="*40)
-    print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ\n")
+    print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก/n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+    print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
+
 
 # แสดงหน้าล็อคอิน
 login_screen()
