@@ -181,7 +181,7 @@ def place_order(category, product_key, quantity, link):
                 # สร้างข้อความที่จะส่งไปยัง Line Group
                 order_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 message = f"ผู้ใช้: {username}\n" \
-                          f"คำสั่งซื้อ ID: {order_id}\n" \
+                          f"คำสั่งซื้อ ID: {order_data['order']}\n" \
                           f"สินค้า: {product['description']}\n" \
                           f"จำนวน: {quantity} ชิ้น\n" \
                           f"ราคาทั้งหมด: {total_price:.2f} บาท\n" \
