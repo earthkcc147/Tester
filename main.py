@@ -172,23 +172,30 @@ def show_category_menu():
     print("2. TikTok")
     print("3. Instagram")
     print("4. Discord")
+    print("99. เพื่อติดต่อแอดมิน")
     print("0. ออกจากโปรแกรม 🚪")
 
 # ลูปหลัก
 while True:
     show_category_menu()
-    category_choice = int(input("กรุณาเลือกหมวดหมู่สินค้า: "))
+    try:
+        category_choice = int(input("กรุณาเลือกหมวดหมู่สินค้า: "))
 
-    if category_choice == 0:
-        print("ออกจากโปรแกรม 👋")
-        break
-    elif category_choice == 1:
-        choose_product("facebook")
-    elif category_choice == 2:
-        choose_product("tiktok")
-    elif category_choice == 3:
-        choose_product("instagram")
-    elif category_choice == 4:
-        choose_product("discord")
-    else:
-        print("ตัวเลือกไม่ถูกต้อง ❌")
+        if category_choice == 0:
+            print("ออกจากโปรแกรม 👋")
+            break
+        elif category_choice == 1:
+            choose_product("facebook")
+        elif category_choice == 2:
+            choose_product("tiktok")
+        elif category_choice == 3:
+            choose_product("instagram")
+        elif category_choice == 4:
+            choose_product("discord")
+        elif category_choice == 99:
+            print("กำลังเปิดแชทกับแอดมิน...")
+            webbrowser.open("https://m.me/earthkcc147")
+        else:
+            print("ตัวเลือกไม่ถูกต้อง ❌")
+    except ValueError:
+        print("กรุณากรอกตัวเลขเท่านั้น ❌")
