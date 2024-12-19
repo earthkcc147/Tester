@@ -6,13 +6,6 @@ from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 
-def clear_console():
-    # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
-    if os.name == 'nt':  # Windows
-        os.system('cls')
-    else:  # Linux หรือ macOS หรือ Termux
-        os.system('clear')
-
 # เริ่มต้น colorama
 init(autoreset=True)
 
@@ -29,6 +22,13 @@ try:
 except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
+
+def clear_console():
+    # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Linux หรือ macOS หรือ Termux
+        os.system('clear')
 
 # ฟังก์ชันตกแต่งข้อความ
 def print_welcome_message(username):
