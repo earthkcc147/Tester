@@ -5,7 +5,6 @@ import webbrowser
 from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
-import datetime
 
 # เริ่มต้น colorama
 init(autoreset=True)
@@ -15,7 +14,6 @@ load_dotenv()
 
 # อ่านค่าจาก .env
 API_URL = os.getenv("API_URL")
-LINE_API_URL = os.getenv('LINE_API_URL')
 USERS_JSON = os.getenv("USERS")
 
 # แปลงข้อมูล USERS_JSON เป็น dictionary
@@ -24,29 +22,6 @@ try:
 except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
-
-
-# ฟังก์ชันสำหรับส่งข้อความไปยัง Line Group
-def send_line_message(message):
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + os.getenv('LINE_ACCESS_TOKEN')  # ใช้ Access Token จาก .env
-    }
-    data = {
-        "to": os.getenv('LINE_GROUP_ID'),  # ใช้ Group ID จาก .env
-        "messages": [{
-            "type": "text",
-            "text": message
-        }]
-    }
-    try:
-        response = requests.post(LINE_API_URL, headers=headers, json=data)
-        if response.status_code == 200:
-            print("ข้อความส่งไปยัง Line Group สำเร็จ ✅")
-        else:
-            print("ไม่สามารถส่งข้อความไปยัง Line Group ได้ ❌")
-    except requests.RequestException as e:
-        print(f"เกิดข้อผิดพลาดในการส่งข้อความไปยัง Line: {e} ❌")
 
 def clear_console():
     # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
@@ -178,18 +153,6 @@ def place_order(category, product_key, quantity, link):
                 print(f"การสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
-                # สร้างข้อความที่จะส่งไปยัง Line Group
-                order_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                message = f"ผู้ใช้: {username}\n" \
-                          f"คำสั่งซื้อ ID: {order_data['order']}\n" \
-                          f"สินค้า: {product['description']}\n" \
-                          f"จำนวน: {quantity} ชิ้น\n" \
-                          f"ราคาทั้งหมด: {total_price:.2f} บาท\n" \
-                          f"เวลา: {order_time}\n" \
-                          f"ลิงก์ที่กรอก: {link}"
-
-                # ส่งข้อความไปยัง Line Group
-                send_line_message(message)
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
         else:
