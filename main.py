@@ -35,31 +35,43 @@ def login_screen():
     print(Fore.CYAN + "="*40)
     print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก/n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
     print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
-    
 
-# แสดงหน้าล็อคอิน
-login_screen()
 
-# รับ username และ password จากผู้ใช้
-username = input(Fore.YELLOW + "กรุณากรอก Username: ")
-# รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
-password = getpass(Fore.YELLOW + "กรุณากรอก Password: ")
+# แสดงเมนูหลัก
+def main_menu():
+    print(Fore.CYAN + "="*40)
+    print(Fore.MAGENTA + Style.BRIGHT + "         เมนูหลัก")
+    print(Fore.CYAN + "="*40)
+    print("1. ล็อคอิน")
+    print("2. ออกจากระบบ")
+    print(Fore.CYAN + "="*40)
 
-# password = input(Fore.YELLOW + "กรุณากรอก Password: ")
 
-# ตรวจสอบ username และ password
-if username not in users_data or users_data[username]['password'] != password:
-    print(Fore.RED + "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌")
-    exit()
+# ฟังก์ชันเข้าสู่ระบบ
+def login():
+    # แสดงหน้าล็อคอิน
+    login_screen()
 
-# ดึงข้อมูลผู้ใช้ปัจจุบัน
-current_user = users_data[username]
-api_key = current_user['api_key']
-products = current_user['products']
-BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
+    # รับ username และ password จากผู้ใช้
+    username = input(Fore.YELLOW + "กรุณากรอก Username: ")
+    # รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
+    password = getpass(Fore.YELLOW + "กรุณากรอก Password: ")
 
-# แสดงข้อความต้อนรับ
-print_welcome_message(username)
+    # ตรวจสอบ username และ password
+    if username not in users_data or users_data[username]['password'] != password:
+        print(Fore.RED + "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌")
+        return None
+
+    # ดึงข้อมูลผู้ใช้ปัจจุบัน
+    current_user = users_data[username]
+    api_key = current_user['api_key']
+    products = current_user['products']
+    BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
+
+    # แสดงข้อความต้อนรับ
+    print_welcome_message(username)
+
+    return current_user
 
 
 # ฟังก์ชันดึงยอดเงินจาก API
@@ -151,6 +163,7 @@ def place_order(category, product_key, quantity, link):
     except requests.RequestException as e:
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
 
+
 # ฟังก์ชันเลือกสินค้า
 def choose_product(category):
     if category not in products:
@@ -186,42 +199,40 @@ def choose_product(category):
         quantity = int(input(f"กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {min_quantity} และ {max_quantity}): "))
         place_order(category, product_key, quantity, link)
 
-# เมนูหลัก
-def show_category_menu():
-    balance = get_balance(api_key)
-    if balance is not None:
-        adjusted_balance = round(balance * BM, 2)
-        print(f"\n--- เมนูหลัก --- ยอดเงิน: {adjusted_balance:.2f} บาท 💳")
-    else:
-        print("\n--- เมนูหลัก --- ไม่สามารถดึงยอดเงินได้ ❗")
 
-    print("1. Facebook")
-    print("2. TikTok")
-    print("3. Instagram")
-    print("4. Discord")
-    print("99. เพื่อติดต่อแอดมิน")
-    print("0. ออกจากโปรแกรม 🚪")
-
-# ลูปหลัก
+# เมนูหลักหลังจากล็อคอิน
 while True:
-    show_category_menu()
-    try:
-        category_choice = int(input("กรุณาเลือกหมวดหมู่สินค้า: "))
+    main_menu()
+    choice = int(input("กรุณาเลือกตัวเลือก: "))
+    if choice == 1:
+        user = login()
+        if user:
+            # เมื่อล็อกอินสำเร็จ ให้แสดงเมนูหมวดหมู่สินค้า
+            while True:
+                show_category_menu()
+                try:
+                    category_choice = int(input("กรุณาเลือกหมวดหมู่สินค้า: "))
 
-        if category_choice == 0:
-            print("ออกจากโปรแกรม 👋")
-            break
-        elif category_choice == 1:
-            choose_product("facebook")
-        elif category_choice == 2:
-            choose_product("tiktok")
-        elif category_choice == 3:
-            choose_product("instagram")
-        elif category_choice == 4:
-            choose_product("discord")
-        elif category_choice == 99:
-            print("https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
-        else:
-            print("ตัวเลือกไม่ถูกต้อง ❌")
-    except ValueError:
-        print("กรุณากรอกตัวเลขเท่านั้น ❌")
+                    if category_choice == 0:
+                        print("ออกจากโปรแกรม 👋")
+                        break
+                    elif category_choice == 1:
+                        choose_product("facebook")
+                    elif category_choice == 2:
+                        choose_product("tiktok")
+                    elif category_choice == 3:
+                        choose_product("instagram")
+                    elif category_choice == 4:
+                        choose_product("discord")
+                    elif category_choice == 99:
+                        print("https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+                    else:
+                        print("ตัวเลือกไม่ถูกต้อง ❌")
+                except ValueError:
+                    print("กรุณากรอกตัวเลขเท่านั้น ❌")
+
+    elif choice == 2:
+        print("ออกจากระบบ 👋")
+        break
+    else:
+        print("ตัวเลือกไม่ถูกต้อง ❌")
