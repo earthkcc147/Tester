@@ -67,7 +67,8 @@ def place_order(category, product_key, quantity, link):
     if 'price_per_rate' in product:
         price_per_rate = product['price_per_rate']
         rate = product['rate']
-        total_price = round(price_per_rate * quantity * rate, 2)
+        # total_price = round(price_per_rate * quantity * rate, 2)
+        total_price = round(price_per_rate * BM / rate * quantity, 2)
     else:
         price_per_rate = product['price_per_unit']
         total_price = round(price_per_rate * quantity, 2)
