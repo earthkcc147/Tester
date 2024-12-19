@@ -5,7 +5,6 @@ import webbrowser
 from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
-import datetime
 
 # เริ่มต้น colorama
 init(autoreset=True)
@@ -23,7 +22,6 @@ try:
 except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
-
 
 def clear_console():
     # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
@@ -155,7 +153,6 @@ def place_order(category, product_key, quantity, link):
                 print(f"การสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
-                
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
         else:
@@ -237,3 +234,4 @@ while True:
             print("ตัวเลือกไม่ถูกต้อง ❌")
     except ValueError:
         print("กรุณากรอกตัวเลขเท่านั้น ❌")
+
