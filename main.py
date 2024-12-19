@@ -33,7 +33,7 @@ def login_screen():
     print(Fore.CYAN + "="*40)
     print(Fore.MAGENTA + Style.BRIGHT + "         ระบบล็อคอิน")
     print(Fore.CYAN + "="*40)
-    print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก/n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+    print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก\n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL"\n)
     print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 
 
