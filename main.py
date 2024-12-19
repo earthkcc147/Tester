@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import webbrowser
 from dotenv import load_dotenv
 
 # โหลดค่าจากไฟล์ .env
