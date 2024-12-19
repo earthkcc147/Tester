@@ -25,7 +25,7 @@ except json.JSONDecodeError:
 
 # ฟังก์ชันตกแต่งข้อความ
 def print_welcome_message(username):
-    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!")
+    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
