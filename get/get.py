@@ -5,7 +5,6 @@ import requests
 from datetime import datetime
 import psutil  # ใช้สำหรับข้อมูลระบบ
 import shutil  # ใช้ตรวจสอบความละเอียดหน้าจอ
-import nmap
 
 # ฟังก์ชันดึง IP Address
 def get_ip():
@@ -89,15 +88,6 @@ def get_network_info():
     except Exception:
         return "ไม่สามารถดึงข้อมูลเครือข่าย"
 
-# เพิ่มฟังก์ชันตรวจสอบข้อมูล Port ในการดึงข้อมูลเต็ม
-def get_open_ports(ip):
-    try:
-        nm = nmap.PortScanner()
-        nm.scan(ip, '1-1024')
-        return {host: nm[host]['tcp'].keys() for host in nm.all_hosts()}
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลพอร์ต"
-
 
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
@@ -109,7 +99,6 @@ def get_full_info():
 
     memory = get_memory_usage()
     network = get_network_info()
-    open_ports = get_open_ports(ip)  # ดึงข้อมูลพอร์ตที่เปิด
 
     # ปรับรูปแบบความละเอียดหน้าจอ
     screen_resolution = device.get("screen_resolution")
@@ -126,7 +115,6 @@ def get_full_info():
 
         "Memory": memory,
         "Network": network,
-        "Open Ports": open_ports,
 
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
