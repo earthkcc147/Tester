@@ -7,7 +7,7 @@ import os
 load_dotenv()
 
 # Line Messaging API
-LINE_API_URL = "https://api.line.me/v2/bot/message/push"
+LINE_API_URL = os.getenv("LINE_API_URL") 
 LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # ใส่ Channel Access Token ในไฟล์ .env
 LINE_GROUP_ID = os.getenv("LINE_GROUP_ID")  # ใส่ Group ID ในไฟล์ .env
 
