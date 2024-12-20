@@ -192,11 +192,11 @@ def place_order(category, product_key, quantity, link):
 # ฟังก์ชันเลือกสินค้า
 def choose_product(category):
     if category not in products:
-        print("ไม่มีสินค้าในหมวดหมู่นี้ ❌")
+        print("❌ ไม่มีสินค้าในหมวดหมู่นี้ ❌")
         return
 
     category_products = products[category]
-    print(f"\n🎯 --- รายการสินค้า {category} --- 🎯")
+    print(f"\n🎯 --- รายการสินค้าในหมวด {category.upper()} --- 🎯")
     for index, (product_name, details) in enumerate(category_products.items(), start=1):
         print(f"\n✨ {index}. {details['description']} ✨")
         print(f"   💵 ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']} ชิ้น")
@@ -205,26 +205,33 @@ def choose_product(category):
         if 'example_link' in details:
             print(f"   🔗 ตัวอย่างลิงก์: {details['example_link']}")
 
-    print("0. ย้อนกลับ 🔙")
+    print("\n🔙 0. ย้อนกลับ")
 
-    choice = int(input("กรุณาเลือกสินค้าที่ต้องการ: "))
-    if choice == 0:
-        return
+    try:
+        choice = int(input("\n🔔 กรุณาเลือกสินค้าที่ต้องการ: "))
+        if choice == 0:
+            print("🔙 กลับไปยังเมนูก่อนหน้า")
+            return
 
-    if 1 <= choice <= len(category_products):
-        product_key = list(category_products.keys())[choice - 1]
-        product = category_products[product_key]
-        print(f"คุณเลือก {product['description']}")
+        if 1 <= choice <= len(category_products):
+            product_key = list(category_products.keys())[choice - 1]
+            product = category_products[product_key]
+            print(f"\n🎉 คุณเลือก: {product['description']} 🎉")
+            print(f"   📦 จำนวนขั้นต่ำ: {product['min_quantity']} ชิ้น")
+            print(f"   📦 จำนวนสูงสุด: {product['max_quantity']} ชิ้น")
+            print(f"   💵 ราคาต่อหน่วย: {product['price_per_rate']:.2f} บาท")
 
-        min_quantity = product['min_quantity']
-        max_quantity = product['max_quantity']
-        price_per_rate = product['price_per_rate']
-        print(f"จำนวนขั้นต่ำ: {min_quantity}, จำนวนสูงสุด: {max_quantity}")
-        print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท")
+            link = input(f"🔗 กรุณากรอกลิงก์ที่ต้องการ (ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): ")
+            quantity = int(input(f"🔢 กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {product['min_quantity']} และ {product['max_quantity']}): "))
 
-        link = input(f"กรุณากรอกลิงก์ที่ต้องการ (ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): ")
-        quantity = int(input(f"กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {min_quantity} และ {max_quantity}): "))
-        place_order(category, product_key, quantity, link)
+            if product['min_quantity'] <= quantity <= product['max_quantity']:
+                place_order(category, product_key, quantity, link)
+            else:
+                print("❌ จำนวนที่กรอกไม่ถูกต้อง กรุณาลองใหม่!")
+        else:
+            print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองใหม่!")
+    except ValueError:
+        print("❌ กรุณากรอกตัวเลขเท่านั้น!")
 
 # เมนูหลัก
 def show_category_menu():
