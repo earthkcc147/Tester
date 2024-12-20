@@ -9,7 +9,9 @@ from datetime import datetime
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
-from get.get import get_device_info  # นำเข้า get_device_info จาก get.py
+from get.get import get_full_info  # นำเข้า get_device_info จาก get.py
+
+device_info = get_full_info()
 
 # เริ่มต้น colorama
 init(autoreset=True)
@@ -45,19 +47,20 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
-    # ดึงข้อมูลอุปกรณ์
-    device_info = get_device_info()
+    
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
         f"🕒 เวลา: {current_time}\n"
-        f"📍 ตำแหน่ง: {device_info['location']}\n"
-        f"💻 ระบบปฏิบัติการ: {device_info['os']} {device_info['os_version']}\n"
-        f"📱 อุปกรณ์: {device_info['device_type']} - {device_info['model']}\n"
-        f"💻 CPU Usage: {device_info['cpu']}%\n"
-        f"💾 RAM Usage: {device_info['ram']}%\n"
-        f"🔋 แบตเตอรี่: {device_info['battery']}%\n"
-        f"🌐 เบราว์เซอร์: {device_info['browser']}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}\n"
+        f"🖥️ อุปกรณ์ที่เข้าสู่ระบบ:\n"
+        f"📍 IP: {device_info['IP']}\n"
+        f"🌏 ตำแหน่ง: {device_info['Location']['city']}, "
+        f"{device_info['Location']['region']}, {device_info['Location']['country']}\n"
+        f"💻 ระบบปฏิบัติการ: {device_info['Device']['os']} {device_info['Device']['os_version']}\n"
+        f"🔧 CPU: {device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)\n"
+        f"🔋 แบตเตอรี่: {device_info['Battery']['percent']}% "
+        f"{'กำลังชาร์จ' if device_info['Battery']['charging'] else 'ไม่ได้ชาร์จ'}\n"
+        f"🖥️ ความละเอียดหน้าจอ: {device_info['Browser']['screen_resolution']}\n"
+        f"⏱️ เวลา: {device_info['Timestamp']}\n"
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
     # ส่งข้อความไปยัง Discord และ Line
