@@ -41,10 +41,12 @@ def clear_console():
     else:  # Linux หรือ macOS หรือ Termux
         os.system('clear')
 
-# ฟังก์ชันตกแต่งข้อความ
+# ฟังก์ชันเพื่อแสดงข้อความยินดีต้อนรับ
 def print_welcome_message(username, device_info):
     current_time = get_current_time()
-    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
+
+    # ข้อความยินดีต้อนรับที่แสดงในคอนโซล
+    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
     print(Fore.CYAN + f"📡 IP: {device_info['ip']}")
     print(Fore.CYAN + f"🌍 ตำแหน่ง: {device_info['location']}")
@@ -54,6 +56,10 @@ def print_welcome_message(username, device_info):
     print(Fore.CYAN + f"🌐 เบราว์เซอร์: {device_info['browser']}")
     print(Fore.CYAN + f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}")
     print(Fore.CYAN + f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}")
+    print(Fore.CYAN + f"💾 หน่วยความจำ: {device_info['memory_info']}")
+    print(Fore.CYAN + f"🔋 แบตเตอรี่: {device_info['battery_info']}")
+    print(Fore.CYAN + f"🖥️ CPU: {device_info['cpu_info']}")
+    print(Fore.CYAN + f"💻 GPU: {device_info['gpu_info']}\n")
 
     # ข้อความแจ้งเตือน
     message = (
@@ -67,6 +73,10 @@ def print_welcome_message(username, device_info):
         f"🌐 เบราว์เซอร์: {device_info['browser']}\n"
         f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}\n"
         f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}\n"
+        f"💾 หน่วยความจำ: {device_info['memory_info']}\n"
+        f"🔋 แบตเตอรี่: {device_info['battery_info']}\n"
+        f"🖥️ CPU: {device_info['cpu_info']}\n"
+        f"💻 GPU: {device_info['gpu_info']}\n"
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
 
