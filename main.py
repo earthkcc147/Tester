@@ -7,6 +7,8 @@ from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 from datetime import datetime
 
+from discord import send_discord_message, get_current_time
+
 # เริ่มต้น colorama
 init(autoreset=True)
 
