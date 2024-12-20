@@ -67,20 +67,6 @@ def get_battery_status():
     except Exception:
         return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
 
-# ฟังก์ชันค้นหาพอร์ตที่เปิดอยู่
-def get_open_ports(ip):
-    open_ports = []
-    nm = nmap.PortScanner()  # ใช้ Nmap สำหรับการสแกนพอร์ต
-    try:
-        # สแกนพอร์ตทั่วไป (ตัวอย่าง: 1-1024)
-        nm.scan(ip, '1-1024')
-        for port in nm[ip]['tcp']:
-            if nm[ip]['tcp'][port]['state'] == 'open':
-                open_ports.append(port)
-    except Exception as e:
-        open_ports.append(f"ไม่สามารถสแกนพอร์ตได้: {str(e)}")
-    return open_ports
-
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
@@ -88,7 +74,6 @@ def get_full_info():
     device = get_device_info()
     battery = get_battery_status()
     gpu = get_gpu_info()
-    open_ports = get_open_ports(ip)  # ดึงข้อมูลพอร์ตที่เปิด
 
     # ปรับรูปแบบความละเอียดหน้าจอ
     screen_resolution = device.get("screen_resolution")
@@ -102,7 +87,6 @@ def get_full_info():
         "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
         "GPU": gpu,
         "Screen Resolution": screen_resolution,
-        "Open Ports": open_ports,  # เพิ่มข้อมูลพอร์ตที่เปิด
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
 
