@@ -9,6 +9,7 @@ from datetime import datetime
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
+from get.get import get_device_info  # นำเข้า get_device_info จาก get.py
 
 # เริ่มต้น colorama
 init(autoreset=True)
