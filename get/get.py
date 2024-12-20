@@ -25,22 +25,6 @@ def get_location(ip):
     except requests.RequestException:
         return {"city": "ไม่ทราบ", "region": "ไม่ทราบ", "country": "ไม่ทราบ"}
 
-# ฟังก์ชันดึงข้อมูล Port
-def get_active_ports():
-    try:
-        ports = []
-        hostname = socket.gethostname()
-        ip_address = socket.gethostbyname(hostname)
-
-        # ดึงข้อมูลการเชื่อมต่อทั้งหมด
-        connections = psutil.net_connections(kind="inet")
-        for conn in connections:
-            if conn.laddr and conn.laddr.ip == ip_address:
-                ports.append(conn.laddr.port)
-        return ports if ports else "ไม่มีข้อมูลพอร์ตที่ใช้งาน"
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลพอร์ตได้"
-
 # ฟังก์ชันดึงข้อมูลอุปกรณ์
 def get_device_info():
     return {
@@ -85,7 +69,6 @@ def get_battery_status():
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
-    active_ports = get_active_ports()
     location = get_location(ip)
     device = get_device_info()
     battery = get_battery_status()
@@ -98,7 +81,6 @@ def get_full_info():
 
     return {
         "IP": ip,
-        "Active Ports": active_ports,
         "Location": location,
         "Device": device,
         "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
@@ -106,3 +88,6 @@ def get_full_info():
         "Screen Resolution": screen_resolution,
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
+
+
+
