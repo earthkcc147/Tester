@@ -11,9 +11,6 @@ from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
 from get.get import get_device_info  # นำเข้า get_device_info จาก get.py
 
-# ดึงข้อมูลอุปกรณ์จาก get_device_info()
-device_info = get_device_info()
-
 # เริ่มต้น colorama
 init(autoreset=True)
 
@@ -44,45 +41,15 @@ def clear_console():
     else:  # Linux หรือ macOS หรือ Termux
         os.system('clear')
 
-# ฟังก์ชันเพื่อแสดงข้อความยินดีต้อนรับ
-def print_welcome_message(username, device_info):
-    current_time = get_current_time()
-
-    # ข้อความยินดีต้อนรับที่แสดงในคอนโซล
-    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!")
+# ฟังก์ชันตกแต่งข้อความ
+def print_welcome_message(username):
+    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
-    print(Fore.CYAN + f"📡 IP: {device_info['ip']}")
-    print(Fore.CYAN + f"🌍 ตำแหน่ง: {device_info['location']}")
-    print(Fore.CYAN + f"💻 อุปกรณ์: {device_info['device']}")
-    print(Fore.CYAN + f"📱 รุ่นอุปกรณ์: {device_info['device_model']}")
-    print(Fore.CYAN + f"🔧 ระบบปฏิบัติการ: {device_info['os']}")
-    print(Fore.CYAN + f"🌐 เบราว์เซอร์: {device_info['browser']}")
-    print(Fore.CYAN + f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}")
-    print(Fore.CYAN + f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}")
-    print(Fore.CYAN + f"💾 หน่วยความจำ: {device_info['memory_info']}")
-    print(Fore.CYAN + f"🔋 แบตเตอรี่: {device_info['battery_info']}")
-    print(Fore.CYAN + f"🖥️ CPU: {device_info['cpu_info']}")
-    print(Fore.CYAN + f"💻 GPU: {device_info['gpu_info']}\n")
-
-    # ข้อความแจ้งเตือน
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
         f"🕒 เวลา: {current_time}\n"
-        f"📡 IP: {device_info['ip']}\n"
-        f"🌍 ตำแหน่ง: {device_info['location']}\n"
-        f"💻 อุปกรณ์: {device_info['device']}\n"
-        f"📱 รุ่นอุปกรณ์: {device_info['device_model']}\n"
-        f"🔧 ระบบปฏิบัติการ: {device_info['os']}\n"
-        f"🌐 เบราว์เซอร์: {device_info['browser']}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}\n"
-        f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}\n"
-        f"💾 หน่วยความจำ: {device_info['memory_info']}\n"
-        f"🔋 แบตเตอรี่: {device_info['battery_info']}\n"
-        f"🖥️ CPU: {device_info['cpu_info']}\n"
-        f"💻 GPU: {device_info['gpu_info']}\n"
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
-
     # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
     send_line_message(message)
@@ -119,8 +86,8 @@ api_key = current_user['api_key']
 products = current_user['products']
 BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
 
-# แสดงข้อความต้อนรับ โดยส่งทั้ง username และ device_info
-print_welcome_message(username, device_info)
+# แสดงข้อความต้อนรับ
+print_welcome_message(username)
 
 
 # ฟังก์ชันดึงยอดเงินจาก API
@@ -286,7 +253,7 @@ def show_category_menu():
     print("📸 3. Instagram")
     print("💬 4. Discord")
     print("📞 99. เพื่อติดต่อแอดมิน")
-    print("🚪 0. ออกจากโปรแกรม\n")
+    print("🚪 0. ออกจากโปรแกรม")
 
 # ลูปหลัก
 while True:
