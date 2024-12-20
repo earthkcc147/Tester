@@ -5,6 +5,7 @@ import webbrowser
 from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
+from datetime import datetime
 
 # เริ่มต้น colorama
 init(autoreset=True)
