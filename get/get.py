@@ -1,50 +1,86 @@
 import os
 import platform
 import socket
-import psutil
 import requests
-from user_agents import parse
+from datetime import datetime
+import psutil  # ใช้สำหรับข้อมูลระบบ
+import shutil  # ใช้ตรวจสอบความละเอียดหน้าจอ
 
+# ฟังก์ชันดึง IP Address
+def get_ip():
+    try:
+        return requests.get("https://api.ipify.org").text
+    except requests.RequestException:
+        return "ไม่สามารถดึงข้อมูล IP ได้"
+
+# ฟังก์ชันดึงตำแหน่งที่ตั้งจาก IP
+def get_location(ip):
+    try:
+        response = requests.get(f"https://ipapi.co/{ip}/json/").json()
+        return {
+            "city": response.get("city", "ไม่ทราบ"),
+            "region": response.get("region", "ไม่ทราบ"),
+            "country": response.get("country_name", "ไม่ทราบ"),
+        }
+    except requests.RequestException:
+        return {"city": "ไม่ทราบ", "region": "ไม่ทราบ", "country": "ไม่ทราบ"}
+
+# ฟังก์ชันดึงข้อมูลอุปกรณ์
 def get_device_info():
-    # ตรวจสอบ IP Address
-    ip = requests.get('https://api.ipify.org').text
-    
-    # ตรวจสอบตำแหน่งที่อยู่ (สามารถใช้ IP Geolocation API)
-    location = requests.get(f'https://ipinfo.io/{ip}/json').json()
-    city = location.get('city', 'ไม่ทราบ')
-    region = location.get('region', 'ไม่ทราบ')
-    country = location.get('country', 'ไม่ทราบ')
-
-    # ตรวจสอบข้อมูลอุปกรณ์
-    user_agent = os.environ.get('HTTP_USER_AGENT', 'ไม่ทราบ')
-    device_info = parse(user_agent)
-
-    # ระบบปฏิบัติการ
-    os_name = platform.system()  # เช่น Windows, Linux, macOS
-    os_version = platform.version()  # เวอร์ชันของระบบปฏิบัติการ
-
-    # ข้อมูลฮาร์ดแวร์
-    cpu = psutil.cpu_percent(interval=1)  # ความเร็วในการใช้งาน CPU
-    ram = psutil.virtual_memory().percent  # ความจำที่ใช้งาน
-    battery = psutil.sensors_battery().percent if psutil.sensors_battery() else 'ไม่สามารถดึงข้อมูลแบตเตอรี่'
-
-    # ข้อมูลเบราว์เซอร์
-    browser = device_info.browser.family
-    device_type = device_info.device.family
-    model = device_info.device.model
-    screen_resolution = os.environ.get('SCREEN_RESOLUTION', 'ไม่ทราบ')  # สมมุติว่าให้ใช้การตั้งค่า SCREEN_RESOLUTION
-
-    # ส่งคืนข้อมูลทั้งหมด
     return {
-        'ip': ip,
-        'location': f"{city}, {region}, {country}",
-        'os': os_name,
-        'os_version': os_version,
-        'cpu': cpu,
-        'ram': ram,
-        'battery': battery,
-        'browser': browser,
-        'device_type': device_type,
-        'model': model,
-        'screen_resolution': screen_resolution
+        "os": platform.system(),
+        "os_version": platform.version(),
+        "platform": platform.platform(),
+        "processor": platform.processor(),
+        "cpu_count": psutil.cpu_count(logical=True),
+        "memory": f"{round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB",
+    }
+
+# ฟังก์ชันดึงข้อมูล GPU (รองรับ Termux/Pydroid3 ที่ไม่มี GPU)
+def get_gpu_info():
+    try:
+        import GPUtil  # ติดตั้งด้วย `pip install gputil`
+        gpus = GPUtil.getGPUs()
+        return [{"name": gpu.name, "load": f"{gpu.load * 100:.2f}%"} for gpu in gpus]
+    except ImportError:
+        return "ไม่สามารถดึงข้อมูล GPU ได้ (อาจไม่มี GPU)"
+
+# ฟังก์ชันดึงข้อมูลเบราว์เซอร์
+def get_browser_info():
+    try:
+        return {
+            "browser": os.environ.get("BROWSER", "ไม่ทราบ"),
+            "screen_resolution": shutil.get_terminal_size(),
+        }
+    except Exception:
+        return {"browser": "ไม่ทราบ", "screen_resolution": "ไม่ทราบ"}
+
+# ฟังก์ชันดึงข้อมูลแบตเตอรี่
+def get_battery_status():
+    try:
+        battery = psutil.sensors_battery()
+        return {
+            "percent": battery.percent,
+            "charging": battery.power_plugged,
+        }
+    except Exception:
+        return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
+
+# ฟังก์ชันรวมข้อมูลทั้งหมด
+def get_full_info():
+    ip = get_ip()
+    location = get_location(ip)
+    device = get_device_info()
+    battery = get_battery_status()
+    gpu = get_gpu_info()
+    browser = get_browser_info()
+
+    return {
+        "IP": ip,
+        "Location": location,
+        "Device": device,
+        "Battery": battery,
+        "GPU": gpu,
+        "Browser": browser,
+        "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
