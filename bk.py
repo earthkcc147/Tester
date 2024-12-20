@@ -9,6 +9,7 @@ from datetime import datetime
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
+from get.get import get_device_info  # นำเข้า get_device_info จาก get.py
 
 # เริ่มต้น colorama
 init(autoreset=True)
@@ -44,7 +45,12 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
-    message = f"ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\nเวลา: {current_time}"
+    message = (
+        f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
+        f"🕒 เวลา: {current_time}\n"
+        "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
+    )
+    # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
     send_line_message(message)
 
@@ -134,16 +140,16 @@ def place_order(category, product_key, quantity, link):
         return
 
     # แสดงรายละเอียดการสั่งซื้อให้ผู้ใช้ยืนยัน
-    print(f"\n--- รายละเอียดการสั่งซื้อ ---")
-    print(f"สินค้า: {product['description']}")
-    print(f"จำนวนที่เลือก: {quantity} ชิ้น")
-    print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท (rate: {rate})")
-    print(f"ราคาทั้งหมด: {total_price:.2f} บาท")
-    print(f"ลิงก์ที่กรอก: {link}")
-    print(f"เครดิตของที่คุณมี: {adjusted_balance:.2f} บาท 💳")
+    print(f"\n🛒 --- รายละเอียดการสั่งซื้อ --- 🛒\n")
+    print(f"📦 สินค้า: {product['description']}")
+    print(f"🔢 จำนวนที่เลือก: {quantity} ชิ้น")
+    print(f"💵 ราคาต่อหน่วย: {price_per_rate:.2f} บาท (💱 rate: {rate})")
+    print(f"💰 ราคาทั้งหมด: {total_price:.2f} บาท")
+    print(f"🔗 ลิงก์ที่กรอก: {link}")
+    print(f"💳 เครดิตที่คุณมี: {adjusted_balance:.2f} บาท")
 
     # การยืนยันการสั่งซื้อ
-    confirm = input("คุณต้องการยืนยันการสั่งซื้อหรือไม่? (y/n): ").lower()
+    confirm = input("\n✅ คุณต้องการยืนยันการสั่งซื้อหรือไม่? (y/n): ").lower()
     if confirm != 'y':
         print("ยกเลิกการสั่งซื้อ ❌")
         return
@@ -163,7 +169,7 @@ def place_order(category, product_key, quantity, link):
             order_data = response_order.json()
             if 'order' in order_data:
                 remaining_balance = round(adjusted_balance - total_price, 2)
-                print(f"การสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
+                print(f"\nการสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
 
@@ -178,7 +184,7 @@ def place_order(category, product_key, quantity, link):
                     f"💳 เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท\n"
                     f"⏰ เวลา: {current_time}"  # เพิ่มเวลา
                 )
-
+                # ส่งข้อความไปยัง Discord และ Line
                 send_discord_message(message)
                 send_line_message(message)
 
@@ -192,62 +198,71 @@ def place_order(category, product_key, quantity, link):
 # ฟังก์ชันเลือกสินค้า
 def choose_product(category):
     if category not in products:
-        print("ไม่มีสินค้าในหมวดหมู่นี้ ❌")
+        print("❌ ไม่มีสินค้าในหมวดหมู่นี้ ❌")
         return
 
     category_products = products[category]
-    print("\n--- รายการสินค้า {category} ---")
+    print(f"\n🎯 --- รายการสินค้าในหมวด {category.upper()} --- 🎯")
     for index, (product_name, details) in enumerate(category_products.items(), start=1):
-        print(f"{index}. {details['description']} - ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']}")
-        print(f"   จำนวนขั้นต่ำ: {details['min_quantity']} - จำนวนสูงสุด: {details['max_quantity']}")
+        print(f"\n✨ {index}. {details['description']} ✨")
+        print(f"   💵 ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']} ชิ้น")
+        print(f"   📦 จำนวนขั้นต่ำ: {details['min_quantity']} ชิ้น")
+        print(f"   📦 จำนวนสูงสุด: {details['max_quantity']} ชิ้น")
         if 'example_link' in details:
-            print(f"   ตัวอย่างลิงก์: {details['example_link']}")
+            print(f"   🔗 ตัวอย่างลิงก์: {details['example_link']}")
 
-    print("0. ย้อนกลับ 🔙")
+    print("\n🔙 0. ย้อนกลับ")
 
-    choice = int(input("กรุณาเลือกสินค้าที่ต้องการ: "))
-    if choice == 0:
-        return
+    try:
+        choice = int(input("\n🔔 กรุณาเลือกสินค้าที่ต้องการ: "))
+        if choice == 0:
+            print("🔙 กลับไปยังเมนูก่อนหน้า")
+            return
 
-    if 1 <= choice <= len(category_products):
-        product_key = list(category_products.keys())[choice - 1]
-        product = category_products[product_key]
-        print(f"คุณเลือก {product['description']}")
+        if 1 <= choice <= len(category_products):
+            product_key = list(category_products.keys())[choice - 1]
+            product = category_products[product_key]
+            print(f"\n🎉 คุณเลือก: {product['description']} 🎉")
+            print(f"   📦 จำนวนขั้นต่ำ: {product['min_quantity']} ชิ้น")
+            print(f"   📦 จำนวนสูงสุด: {product['max_quantity']} ชิ้น")
+            print(f"   💵 ราคาต่อหน่วย: {product['price_per_rate']:.2f} บาท")
 
-        min_quantity = product['min_quantity']
-        max_quantity = product['max_quantity']
-        price_per_rate = product['price_per_rate']
-        print(f"จำนวนขั้นต่ำ: {min_quantity}, จำนวนสูงสุด: {max_quantity}")
-        print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท")
+            link = input(f"\n🔗 กรุณากรอกลิงก์ที่ต้องการ\n   (💡 ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): \n👉 ")
+            quantity = int(input(f"\n🔢 กรุณากรอกจำนวนที่ต้องการซื้อ\n   (📦 ระหว่าง {product['min_quantity']} และ {product['max_quantity']}): \n👉 "))
 
-        link = input(f"กรุณากรอกลิงก์ที่ต้องการ (ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): ")
-        quantity = int(input(f"กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {min_quantity} และ {max_quantity}): "))
-        place_order(category, product_key, quantity, link)
+            if product['min_quantity'] <= quantity <= product['max_quantity']:
+                place_order(category, product_key, quantity, link)
+            else:
+                print("❌ จำนวนที่กรอกไม่ถูกต้อง กรุณาลองใหม่!")
+        else:
+            print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองใหม่!")
+    except ValueError:
+        print("❌ กรุณากรอกตัวเลขเท่านั้น!")
 
 # เมนูหลัก
 def show_category_menu():
     balance = get_balance(api_key)
     if balance is not None:
         adjusted_balance = round(balance * BM, 2)
-        print(f"\n--- เมนูหลัก --- ยอดเงิน: {adjusted_balance:.2f} บาท 💳")
+        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
-        print("\n--- เมนูหลัก --- ไม่สามารถดึงยอดเงินได้ ❗")
+        print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
 
-    print("1. Facebook")
-    print("2. TikTok")
-    print("3. Instagram")
-    print("4. Discord")
-    print("99. เพื่อติดต่อแอดมิน")
-    print("0. ออกจากโปรแกรม 🚪")
+    print("📘 1. Facebook")
+    print("🎵 2. TikTok")
+    print("📸 3. Instagram")
+    print("💬 4. Discord")
+    print("📞 99. เพื่อติดต่อแอดมิน")
+    print("🚪 0. ออกจากโปรแกรม")
 
 # ลูปหลัก
 while True:
     show_category_menu()
     try:
-        category_choice = int(input("กรุณาเลือกหมวดหมู่สินค้า: "))
+        category_choice = int(input("🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
 
         if category_choice == 0:
-            print("ออกจากโปรแกรม 👋")
+            print("👋 ออกจากโปรแกรม เรียบร้อยแล้ว!")
             break
         elif category_choice == 1:
             choose_product("facebook")
@@ -258,8 +273,8 @@ while True:
         elif category_choice == 4:
             choose_product("discord")
         elif category_choice == 99:
-            print("https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+            print("📍 ติดต่อแอดมิน: https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
         else:
-            print("ตัวเลือกไม่ถูกต้อง ❌")
+            print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองอีกครั้ง!")
     except ValueError:
-        print("กรุณากรอกตัวเลขเท่านั้น ❌")
+        print("❌ กรุณากรอกตัวเลขเท่านั้น!")
