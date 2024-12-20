@@ -1,48 +1,48 @@
+import psutil
 import requests
 import platform
 import ctypes
+import psutil
 
-# ฟังก์ชันดึงข้อมูลเบราว์เซอร์และระบบปฏิบัติการ
-def parse_device_details(user_agent):
-    if "Windows" in user_agent:
-        os = "Windows"
-    elif "Macintosh" in user_agent:
-        os = "MacOS"
-    elif "iPhone" in user_agent:
-        os = "iOS"
-    elif "Android" in user_agent:
-        os = "Android"
-    else:
-        os = "ไม่ทราบระบบปฏิบัติการ"
+# ฟังก์ชันดึงข้อมูล RAM
+def get_memory_info():
+    memory = psutil.virtual_memory()
+    total_memory = memory.total / (1024 ** 3)  # แปลงหน่วยเป็น GB
+    available_memory = memory.available / (1024 ** 3)  # แปลงหน่วยเป็น GB
+    used_memory = memory.used / (1024 ** 3)  # แปลงหน่วยเป็น GB
+    return f"หน่วยความจำทั้งหมด: {total_memory:.2f} GB, ใช้ไป: {used_memory:.2f} GB, ว่าง: {available_memory:.2f} GB"
 
-    if "Chrome" in user_agent:
-        browser = "Google Chrome"
-    elif "Firefox" in user_agent:
-        browser = "Mozilla Firefox"
-    elif "Safari" in user_agent:
-        browser = "Safari"
-    else:
-        browser = "ไม่ทราบเบราว์เซอร์"
+# ฟังก์ชันดึงข้อมูลแบตเตอรี่
+def get_battery_info():
+    battery = psutil.sensors_battery()
+    if battery:
+        battery_percent = battery.percent
+        plugged = battery.power_plugged
+        remaining_time = battery.secsleft / 60 if battery.secsleft != psutil.POWER_TIME_UNLIMITED else None
+        
+        status = "ชาร์จเต็ม" if plugged else "ชาร์จไม่เต็ม"
+        
+        # ถ้ามีเวลาในการชาร์จที่เหลือ
+        time_left = f"{remaining_time:.0f} นาที" if remaining_time else "ไม่สามารถคำนวณเวลาได้"
+        
+        return f"แบตเตอรี่: {battery_percent}% ({status}), เวลาในการชาร์จที่เหลือ: {time_left}"
     
-    return os, browser
+    return "ข้อมูลแบตเตอรี่ไม่พร้อมใช้งาน"
 
-# ฟังก์ชันดึงข้อมูลความละเอียดหน้าจอ
-def get_screen_resolution():
-    try:
-        user32 = ctypes.windll.user32
-        screen_width = user32.GetSystemMetrics(0)
-        screen_height = user32.GetSystemMetrics(1)
-        return f"{screen_width}x{screen_height}"
-    except:
-        return "ไม่สามารถดึงข้อมูลความละเอียด"
+# ฟังก์ชันดึงข้อมูล CPU
+def get_cpu_info():
+    cpu_count = psutil.cpu_count(logical=False)  # จำนวนคอร์ของ CPU
+    cpu_freq = psutil.cpu_freq().current  # ความถี่ของ CPU (MHz)
+    return f"CPU: {cpu_count} คอร์, ความถี่ {cpu_freq} MHz"
 
-# ฟังก์ชันดึงข้อมูลความเร็วในการเชื่อมต่อ (ประมาณ)
-def get_connection_speed():
+# ฟังก์ชันดึงข้อมูล GPU
+def get_gpu_info():
+    # สำหรับการใช้งานกับเครื่องที่มี GPU โดยเฉพาะ
     try:
-        speed_info = requests.get("https://www.speedtest.net/api/js/").json()
-        return f"{speed_info['download']} Mbps (ดาวน์โหลด), {speed_info['upload']} Mbps (อัพโหลด)"
+        gpu_info = subprocess.check_output("nvidia-smi --query-gpu=name --format=csv,noheader", shell=True)
+        return f"GPU: {gpu_info.decode().strip()}"
     except:
-        return "ไม่สามารถดึงข้อมูลความเร็ว"
+        return "ข้อมูล GPU ไม่สามารถดึงได้"
 
 # ฟังก์ชันดึงข้อมูลจาก IP
 def get_ip_info():
@@ -56,7 +56,7 @@ def get_ip_info():
     except:
         return "ไม่สามารถดึงข้อมูล", "ไม่สามารถดึงข้อมูล", "ไม่สามารถดึงข้อมูล", "ไม่สามารถดึงข้อมูล"
 
-# ฟังก์ชันดึงข้อมูลทั้งหมด
+# ฟังก์ชันดึงข้อมูลจากอุปกรณ์ทั้งหมด
 def get_device_info():
     try:
         ip, city, region, country = get_ip_info()
@@ -66,6 +66,11 @@ def get_device_info():
         screen_resolution = get_screen_resolution()
         connection_speed = get_connection_speed()
 
+        memory_info = get_memory_info()
+        battery_info = get_battery_info()
+        cpu_info = get_cpu_info()
+        gpu_info = get_gpu_info()
+
         return {
             "ip": ip,
             "location": f"{city}, {region}, {country}",
@@ -74,7 +79,11 @@ def get_device_info():
             "os": os,
             "browser": browser,
             "screen_resolution": screen_resolution,
-            "connection_speed": connection_speed
+            "connection_speed": connection_speed,
+            "memory_info": memory_info,
+            "battery_info": battery_info,
+            "cpu_info": cpu_info,
+            "gpu_info": gpu_info
         }
     except Exception as e:
         return {
@@ -85,5 +94,29 @@ def get_device_info():
             "os": "ไม่สามารถดึงข้อมูล",
             "browser": "ไม่สามารถดึงข้อมูล",
             "screen_resolution": "ไม่สามารถดึงข้อมูล",
-            "connection_speed": "ไม่สามารถดึงข้อมูล"
+            "connection_speed": "ไม่สามารถดึงข้อมูล",
+            "memory_info": "ไม่สามารถดึงข้อมูล",
+            "battery_info": "ไม่สามารถดึงข้อมูล",
+            "cpu_info": "ไม่สามารถดึงข้อมูล",
+            "gpu_info": "ไม่สามารถดึงข้อมูล"
         }
+
+
+
+
+
+
+
+
+def print_welcome_message(username, device_info):
+    current_time = get_current_time()
+    print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
+    print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+    print(Fore.CYAN + f"📡 IP: {device_info['ip']}")
+    print(Fore.CYAN + f"🌍 ตำแหน่ง: {device_info['location']}")
+    print(Fore.CYAN + f"💻 อุปกรณ์: {device_info['device']}")
+    print(Fore.CYAN + f"📱 รุ่นอุปกรณ์: {device_info['device_model']}")
+    print(Fore.CYAN + f"🔧 ระบบปฏิบัติการ: {device_info['os']}")
+    print(Fore.CYAN + f"🌐 เบราว์เซอร์: {device_info['browser']}")
+    print(Fore.CYAN + f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}")
+    print(Fore.CYAN + f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}")
