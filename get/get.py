@@ -67,6 +67,38 @@ def get_battery_status():
     except Exception:
         return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
 
+
+# ฟังก์ชันดึงข้อมูลการใช้หน่วยความจำ (RAM)
+def get_memory_usage():
+    try:
+        memory = psutil.virtual_memory()
+        return {
+            "total": f"{round(memory.total / (1024 ** 3), 2)} GB",
+            "used": f"{round(memory.used / (1024 ** 3), 2)} GB",
+            "free": f"{round(memory.free / (1024 ** 3), 2)} GB",
+            "percent": f"{memory.percent}%",
+        }
+    except Exception:
+        return "ไม่สามารถดึงข้อมูลหน่วยความจำ"
+
+# ฟังก์ชันดึงข้อมูลเครือข่าย (Network)
+def get_network_info():
+    try:
+        network = psutil.net_if_addrs()
+        return {interface: [addr.address for addr in interfaces if addr.family == socket.AF_INET] for interface, interfaces in network.items()}
+    except Exception:
+        return "ไม่สามารถดึงข้อมูลเครือข่าย"
+
+# เพิ่มฟังก์ชันตรวจสอบข้อมูล Port ในการดึงข้อมูลเต็ม
+def get_open_ports(ip):
+    try:
+        nm = nmap.PortScanner()
+        nm.scan(ip, '1-1024')
+        return {host: nm[host]['tcp'].keys() for host in nm.all_hosts()}
+    except Exception:
+        return "ไม่สามารถดึงข้อมูลพอร์ต"
+
+
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
@@ -74,6 +106,10 @@ def get_full_info():
     device = get_device_info()
     battery = get_battery_status()
     gpu = get_gpu_info()
+
+    memory = get_memory_usage()
+    network = get_network_info()
+    open_ports = get_open_ports(ip)  # ดึงข้อมูลพอร์ตที่เปิด
 
     # ปรับรูปแบบความละเอียดหน้าจอ
     screen_resolution = device.get("screen_resolution")
@@ -87,6 +123,11 @@ def get_full_info():
         "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
         "GPU": gpu,
         "Screen Resolution": screen_resolution,
+
+        "Memory": memory,
+        "Network": network,
+        "Open Ports": open_ports,
+
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
 
