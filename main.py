@@ -45,9 +45,19 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+    # ดึงข้อมูลอุปกรณ์
+    device_info = get_device_info()
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
         f"🕒 เวลา: {current_time}\n"
+        f"📍 ตำแหน่ง: {device_info['location']}\n"
+        f"💻 ระบบปฏิบัติการ: {device_info['os']} {device_info['os_version']}\n"
+        f"📱 อุปกรณ์: {device_info['device_type']} - {device_info['model']}\n"
+        f"💻 CPU Usage: {device_info['cpu']}%\n"
+        f"💾 RAM Usage: {device_info['ram']}%\n"
+        f"🔋 แบตเตอรี่: {device_info['battery']}%\n"
+        f"🌐 เบราว์เซอร์: {device_info['browser']}\n"
+        f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}\n"
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
     # ส่งข้อความไปยัง Discord และ Line
