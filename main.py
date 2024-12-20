@@ -53,14 +53,11 @@ def print_welcome_message(username):
         f"🕒 เวลา: {current_time}\n"
         f"🖥️ อุปกรณ์ที่เข้าสู่ระบบ:\n"
         f"📍 IP: {device_info['IP']}\n"
-        f"🌏 ตำแหน่ง: {device_info['Location']['city']}, "
-        f"{device_info['Location']['region']}, {device_info['Location']['country']}\n"
+        f"🌏 ตำแหน่ง: {device_info['Location']['city']}, {device_info['Location']['region']}, {device_info['Location']['country']}\n"
         f"💻 ระบบปฏิบัติการ: {device_info['Device']['os']} {device_info['Device']['os_version']}\n"
         f"🔧 CPU: {device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)\n"
-        f"🔋 แบตเตอรี่: {device_info['Battery']['percent']}% "
-        f"{'กำลังชาร์จ' if device_info['Battery']['charging'] else 'ไม่ได้ชาร์จ'}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Browser']['screen_resolution']}\n"
-        f"⏱️ เวลา: {device_info['Timestamp']}\n"
+        f"🔋 แบตเตอรี่: {device_info['Battery']}\n"
+        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution']}\n"
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
     # ส่งข้อความไปยัง Discord และ Line
