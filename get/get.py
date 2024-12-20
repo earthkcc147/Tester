@@ -1,105 +1,50 @@
+import os
+import platform
+import socket
 import psutil
 import requests
-import platform
-import ctypes
-import psutil
+from user_agents import parse
 
-# ฟังก์ชันดึงข้อมูล RAM
-def get_memory_info():
-    memory = psutil.virtual_memory()
-    total_memory = memory.total / (1024 ** 3)  # แปลงหน่วยเป็น GB
-    available_memory = memory.available / (1024 ** 3)  # แปลงหน่วยเป็น GB
-    used_memory = memory.used / (1024 ** 3)  # แปลงหน่วยเป็น GB
-    return f"หน่วยความจำทั้งหมด: {total_memory:.2f} GB, ใช้ไป: {used_memory:.2f} GB, ว่าง: {available_memory:.2f} GB"
-
-# ฟังก์ชันดึงข้อมูลแบตเตอรี่
-def get_battery_info():
-    battery = psutil.sensors_battery()
-    if battery:
-        battery_percent = battery.percent
-        plugged = battery.power_plugged
-        remaining_time = battery.secsleft / 60 if battery.secsleft != psutil.POWER_TIME_UNLIMITED else None
-        
-        status = "ชาร์จเต็ม" if plugged else "ชาร์จไม่เต็ม"
-        
-        # ถ้ามีเวลาในการชาร์จที่เหลือ
-        time_left = f"{remaining_time:.0f} นาที" if remaining_time else "ไม่สามารถคำนวณเวลาได้"
-        
-        return f"แบตเตอรี่: {battery_percent}% ({status}), เวลาในการชาร์จที่เหลือ: {time_left}"
-    
-    return "ข้อมูลแบตเตอรี่ไม่พร้อมใช้งาน"
-
-# ฟังก์ชันดึงข้อมูล CPU
-def get_cpu_info():
-    cpu_count = psutil.cpu_count(logical=False)  # จำนวนคอร์ของ CPU
-    cpu_freq = psutil.cpu_freq().current  # ความถี่ของ CPU (MHz)
-    return f"CPU: {cpu_count} คอร์, ความถี่ {cpu_freq} MHz"
-
-# ฟังก์ชันดึงข้อมูล GPU
-def get_gpu_info():
-    # สำหรับการใช้งานกับเครื่องที่มี GPU โดยเฉพาะ
-    try:
-        gpu_info = subprocess.check_output("nvidia-smi --query-gpu=name --format=csv,noheader", shell=True)
-        return f"GPU: {gpu_info.decode().strip()}"
-    except:
-        return "ข้อมูล GPU ไม่สามารถดึงได้"
-
-# ฟังก์ชันดึงข้อมูลจาก IP
-def get_ip_info():
-    try:
-        ip_info = requests.get("https://ipinfo.io/json").json()
-        ip = ip_info.get("ip", "ไม่ทราบ IP")
-        city = ip_info.get("city", "ไม่ทราบเมือง")
-        region = ip_info.get("region", "ไม่ทราบภูมิภาค")
-        country = ip_info.get("country", "ไม่ทราบประเทศ")
-        return ip, city, region, country
-    except:
-        return "ไม่สามารถดึงข้อมูล", "ไม่สามารถดึงข้อมูล", "ไม่สามารถดึงข้อมูล", "ไม่สามารถดึงข้อมูล"
-
-# ฟังก์ชันดึงข้อมูลจากอุปกรณ์ทั้งหมด
 def get_device_info():
-    try:
-        ip, city, region, country = get_ip_info()
-        user_agent = requests.get("https://httpbin.org/user-agent").json().get("user-agent", "ไม่ทราบอุปกรณ์")
-        device_model = platform.system()  # สามารถปรับปรุงหากต้องการข้อมูลอุปกรณ์ที่เจาะจงมากขึ้น
-        os, browser = parse_device_details(user_agent)
-        screen_resolution = get_screen_resolution()
-        connection_speed = get_connection_speed()
+    # ตรวจสอบ IP Address
+    ip = requests.get('https://api.ipify.org').text
+    
+    # ตรวจสอบตำแหน่งที่อยู่ (สามารถใช้ IP Geolocation API)
+    location = requests.get(f'https://ipinfo.io/{ip}/json').json()
+    city = location.get('city', 'ไม่ทราบ')
+    region = location.get('region', 'ไม่ทราบ')
+    country = location.get('country', 'ไม่ทราบ')
 
-        memory_info = get_memory_info()
-        battery_info = get_battery_info()
-        cpu_info = get_cpu_info()
-        gpu_info = get_gpu_info()
+    # ตรวจสอบข้อมูลอุปกรณ์
+    user_agent = os.environ.get('HTTP_USER_AGENT', 'ไม่ทราบ')
+    device_info = parse(user_agent)
 
-        return {
-            "ip": ip,
-            "location": f"{city}, {region}, {country}",
-            "device": user_agent,
-            "device_model": device_model,
-            "os": os,
-            "browser": browser,
-            "screen_resolution": screen_resolution,
-            "connection_speed": connection_speed,
-            "memory_info": memory_info,
-            "battery_info": battery_info,
-            "cpu_info": cpu_info,
-            "gpu_info": gpu_info
-        }
-    except Exception as e:
-        return {
-            "ip": "ไม่สามารถดึงข้อมูล",
-            "location": "ไม่สามารถดึงข้อมูล",
-            "device": "ไม่สามารถดึงข้อมูล",
-            "device_model": "ไม่สามารถดึงข้อมูล",
-            "os": "ไม่สามารถดึงข้อมูล",
-            "browser": "ไม่สามารถดึงข้อมูล",
-            "screen_resolution": "ไม่สามารถดึงข้อมูล",
-            "connection_speed": "ไม่สามารถดึงข้อมูล",
-            "memory_info": "ไม่สามารถดึงข้อมูล",
-            "battery_info": "ไม่สามารถดึงข้อมูล",
-            "cpu_info": "ไม่สามารถดึงข้อมูล",
-            "gpu_info": "ไม่สามารถดึงข้อมูล"
-        }
+    # ระบบปฏิบัติการ
+    os_name = platform.system()  # เช่น Windows, Linux, macOS
+    os_version = platform.version()  # เวอร์ชันของระบบปฏิบัติการ
 
+    # ข้อมูลฮาร์ดแวร์
+    cpu = psutil.cpu_percent(interval=1)  # ความเร็วในการใช้งาน CPU
+    ram = psutil.virtual_memory().percent  # ความจำที่ใช้งาน
+    battery = psutil.sensors_battery().percent if psutil.sensors_battery() else 'ไม่สามารถดึงข้อมูลแบตเตอรี่'
 
+    # ข้อมูลเบราว์เซอร์
+    browser = device_info.browser.family
+    device_type = device_info.device.family
+    model = device_info.device.model
+    screen_resolution = os.environ.get('SCREEN_RESOLUTION', 'ไม่ทราบ')  # สมมุติว่าให้ใช้การตั้งค่า SCREEN_RESOLUTION
 
+    # ส่งคืนข้อมูลทั้งหมด
+    return {
+        'ip': ip,
+        'location': f"{city}, {region}, {country}",
+        'os': os_name,
+        'os_version': os_version,
+        'cpu': cpu,
+        'ram': ram,
+        'battery': battery,
+        'browser': browser,
+        'device_type': device_type,
+        'model': model,
+        'screen_resolution': screen_resolution
+    }
