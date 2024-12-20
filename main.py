@@ -42,14 +42,34 @@ def clear_console():
         os.system('clear')
 
 # ฟังก์ชันตกแต่งข้อความ
-def print_welcome_message(username):
+def print_welcome_message(username, device_info):
+    current_time = get_current_time()
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+    print(Fore.CYAN + f"📡 IP: {device_info['ip']}")
+    print(Fore.CYAN + f"🌍 ตำแหน่ง: {device_info['location']}")
+    print(Fore.CYAN + f"💻 อุปกรณ์: {device_info['device']}")
+    print(Fore.CYAN + f"📱 รุ่นอุปกรณ์: {device_info['device_model']}")
+    print(Fore.CYAN + f"🔧 ระบบปฏิบัติการ: {device_info['os']}")
+    print(Fore.CYAN + f"🌐 เบราว์เซอร์: {device_info['browser']}")
+    print(Fore.CYAN + f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}")
+    print(Fore.CYAN + f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}")
+
+    # ข้อความแจ้งเตือน
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
         f"🕒 เวลา: {current_time}\n"
+        f"📡 IP: {device_info['ip']}\n"
+        f"🌍 ตำแหน่ง: {device_info['location']}\n"
+        f"💻 อุปกรณ์: {device_info['device']}\n"
+        f"📱 รุ่นอุปกรณ์: {device_info['device_model']}\n"
+        f"🔧 ระบบปฏิบัติการ: {device_info['os']}\n"
+        f"🌐 เบราว์เซอร์: {device_info['browser']}\n"
+        f"🖥️ ความละเอียดหน้าจอ: {device_info['screen_resolution']}\n"
+        f"⚡ ความเร็วในการเชื่อมต่อ: {device_info['connection_speed']}\n"
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
+
     # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
     send_line_message(message)
