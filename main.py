@@ -11,6 +11,9 @@ from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
 from get.get import get_device_info  # นำเข้า get_device_info จาก get.py
 
+# ดึงข้อมูลอุปกรณ์จาก get_device_info()
+device_info = get_device_info()
+
 # เริ่มต้น colorama
 init(autoreset=True)
 
@@ -115,9 +118,6 @@ current_user = users_data[username]
 api_key = current_user['api_key']
 products = current_user['products']
 BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
-
-# ดึงข้อมูลอุปกรณ์จาก get_device_info()
-device_info = get_device_info()
 
 # แสดงข้อความต้อนรับ โดยส่งทั้ง username และ device_info
 print_welcome_message(username, device_info)
