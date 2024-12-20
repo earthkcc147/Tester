@@ -163,7 +163,7 @@ def place_order(category, product_key, quantity, link):
             order_data = response_order.json()
             if 'order' in order_data:
                 remaining_balance = round(adjusted_balance - total_price, 2)
-                print(f"การสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
+                print(f"\nการสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
 
