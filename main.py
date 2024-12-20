@@ -29,6 +29,11 @@ LINE_API_URL = "https://api.line.me/v2/bot/message/push"
 LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # ใส่ Channel Access Token ในไฟล์ .env
 LINE_GROUP_ID = os.getenv("LINE_GROUP_ID")  # ใส่ Group ID ในไฟล์ .env
 
+# ฟังก์ชันเพื่อรับเวลาปัจจุบันในรูปแบบที่ต้องการ
+def get_current_time():
+    now = datetime.now()
+    return now.strftime("%Y-%m-%d %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
+
 def send_line_message(message):
     headers = {
         "Content-Type": "application/json",
