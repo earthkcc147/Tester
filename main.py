@@ -179,6 +179,7 @@ def place_order(category, product_key, quantity, link):
                     f"⏰ เวลา: {current_time}"  # เพิ่มเวลา
                 )
 
+                send_discord_message(message)
                 send_line_message(message)
 
             else:
