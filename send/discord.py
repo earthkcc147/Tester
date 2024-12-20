@@ -31,4 +31,3 @@ def send_discord_message(message):
 def get_current_time():
     now = datetime.now()
     return now.strftime("%Y-%m-%d %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
-
