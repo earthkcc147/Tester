@@ -19,6 +19,7 @@ load_dotenv()
 # อ่านค่าจาก .env
 API_URL = os.getenv("API_URL")
 USERS_JSON = os.getenv("USERS")
+current_time = get_current_time()
 
 # แปลงข้อมูล USERS_JSON เป็น dictionary
 try:
