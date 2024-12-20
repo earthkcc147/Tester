@@ -8,7 +8,7 @@ load_dotenv()
 
 # ดึงค่า Bot Token และ Channel ID จาก .env
 DISCORD_API_URL = os.getenv("DISCORD_API_URL")  # Base URL ของ Discord API
-DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 DISCORD_CHANNEL_ID = os.getenv("DISCORD_CHANNEL_ID")
 
 # ฟังก์ชันเพื่อส่งข้อความไปยัง Discord
