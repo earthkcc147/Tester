@@ -1,8 +1,10 @@
 import requests
 from datetime import datetime
 
-# Discord Webhook URL
-DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL"  # แทนที่ด้วย Webhook URL ของคุณ
+# Line Messaging API
+LINE_API_URL = "https://api.line.me/v2/bot/message/push"
+LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # ใส่ Channel Access Token ในไฟล์ .env
+LINE_GROUP_ID = os.getenv("LINE_GROUP_ID")  # ใส่ Group ID ในไฟล์ .env
 
 # ฟังก์ชันเพื่อส่งข้อความไปยัง line
 def send_line_message(message):
