@@ -61,7 +61,6 @@ def print_welcome_message(username):
 
         f"💾 RAM: {device_info['Memory']['total']} (Used: {device_info['Memory']['used']}, Free: {device_info['Memory']['free']}, Usage: {device_info['Memory']['percent']})\n"
         f"🌐 เครือข่าย: {device_info['Network']}\n"
-        # f"🔓 พอร์ตที่เปิด: {device_info['Open Ports']}\n"
         
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
