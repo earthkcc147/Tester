@@ -183,7 +183,7 @@ def place_order(category, product_key, quantity, link):
                     f"💳 เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท\n"
                     f"⏰ เวลา: {current_time}"  # เพิ่มเวลา
                 )
-
+                # ส่งข้อความไปยัง Discord และ Line
                 send_discord_message(message)
                 send_line_message(message)
 
