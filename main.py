@@ -23,6 +23,33 @@ except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
 
+# Line Messaging API
+LINE_API_URL = "https://api.line.me/v2/bot/message/push"
+LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")  # ใส่ Channel Access Token ในไฟล์ .env
+LINE_GROUP_ID = os.getenv("LINE_GROUP_ID")  # ใส่ Group ID ในไฟล์ .env
+
+def send_line_message(message):
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {LINE_ACCESS_TOKEN}"
+    }
+    data = {
+        "to": LINE_GROUP_ID,
+        "messages": [{
+            "type": "text",
+            "text": message
+        }]
+    }
+    try:
+        response = requests.post(LINE_API_URL, headers=headers, json=data)
+        if response.status_code == 200:
+            print("ส่งข้อความไปที่ Line สำเร็จ ✅")
+        else:
+            print(f"เกิดข้อผิดพลาด: {response.status_code} ❌")
+            print(response.json())
+    except requests.RequestException as e:
+        print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
+
 def clear_console():
     # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
     if os.name == 'nt':  # Windows
@@ -34,6 +61,8 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+    message = f"ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅"
+    send_line_message(message)
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
 def login_screen():
