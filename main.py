@@ -45,7 +45,7 @@ def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
     message = f"ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\nเวลา: {current_time}"
-    # send_discord_message(message)
+    send_discord_message(message)
     send_line_message(message)
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
