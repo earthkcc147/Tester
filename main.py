@@ -283,7 +283,7 @@ def show_category_menu():
     print("📸 3. Instagram")
     print("💬 4. Discord")
     print("📞 99. เพื่อติดต่อแอดมิน")
-    print("🚪 0. ออกจากโปรแกรม")
+    print("🚪 0. ออกจากโปรแกรม\n")
 
 # ลูปหลัก
 while True:
