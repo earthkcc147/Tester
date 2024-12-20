@@ -5,6 +5,10 @@ import webbrowser
 from dotenv import load_dotenv
 from colorama import init, Fore, Style
 from getpass import getpass  # เพิ่มการใช้งาน getpass
+from datetime import datetime
+
+from send.discord import send_discord_message, get_current_time
+from send.line import send_line_message, get_current_time
 
 # เริ่มต้น colorama
 init(autoreset=True)
@@ -15,6 +19,7 @@ load_dotenv()
 # อ่านค่าจาก .env
 API_URL = os.getenv("API_URL")
 USERS_JSON = os.getenv("USERS")
+current_time = get_current_time()
 
 # แปลงข้อมูล USERS_JSON เป็น dictionary
 try:
@@ -22,6 +27,11 @@ try:
 except json.JSONDecodeError:
     print(Fore.RED + "ไม่สามารถแปลงข้อมูล USERS จาก .env ได้ ❌")
     exit()
+
+# ฟังก์ชันเพื่อรับเวลาปัจจุบันในรูปแบบที่ต้องการ
+def get_current_time():
+    now = datetime.now()
+    return now.strftime("%d-%m-%Y %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
 
 def clear_console():
     # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
@@ -34,6 +44,9 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+    message = f"ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\nเวลา: {current_time}"
+    send_discord_message(message)
+    send_line_message(message)
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
 def login_screen():
@@ -127,7 +140,7 @@ def place_order(category, product_key, quantity, link):
     print(f"ราคาต่อหน่วย: {price_per_rate:.2f} บาท (rate: {rate})")
     print(f"ราคาทั้งหมด: {total_price:.2f} บาท")
     print(f"ลิงก์ที่กรอก: {link}")
-    print(f"ยอดเงินที่คุณมีหลังจากคูณ: {adjusted_balance:.2f} บาท 💳")
+    print(f"เครดิตของที่คุณมี: {adjusted_balance:.2f} บาท 💳")
 
     # การยืนยันการสั่งซื้อ
     confirm = input("คุณต้องการยืนยันการสั่งซื้อหรือไม่? (y/n): ").lower()
@@ -152,7 +165,23 @@ def place_order(category, product_key, quantity, link):
                 remaining_balance = round(adjusted_balance - total_price, 2)
                 print(f"การสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
-                print(f"ยอดเงินที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
+                print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
+
+                # ข้อความที่รวมข้อมูลต่างๆไปที่ Line
+                message = (
+                    f"🎉 การสั่งซื้อสำเร็จ! 🎉\n"
+                    f"👤 ผู้ใช้: {username}\n"  # เพิ่มชื่อผู้ใช้
+                    f"🛒 คำสั่งซื้อ ID: {order_data['order']} ✅\n"
+                    f"🛒 หมวดหมู่: {category} 📦\n"  # เพิ่มหมวดหมู่ที่เลือก
+                    f"📦 สินค้าที่เลือก: {product['description']}\n"
+                    f"💵 รวมราคาทั้งหมด: {total_price:.2f} บาท\n"
+                    f"💳 เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท\n"
+                    f"⏰ เวลา: {current_time}"  # เพิ่มเวลา
+                )
+
+                send_discord_message(message)
+                send_line_message(message)
+
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
         else:
@@ -167,7 +196,7 @@ def choose_product(category):
         return
 
     category_products = products[category]
-    print("\n--- รายการสินค้า ---")
+    print("\n--- รายการสินค้า {category} ---")
     for index, (product_name, details) in enumerate(category_products.items(), start=1):
         print(f"{index}. {details['description']} - ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']}")
         print(f"   จำนวนขั้นต่ำ: {details['min_quantity']} - จำนวนสูงสุด: {details['max_quantity']}")
