@@ -171,6 +171,7 @@ def place_order(category, product_key, quantity, link):
                 message = (
                     f"🎉 การสั่งซื้อสำเร็จ! 🎉\n"
                     f"👤 ผู้ใช้: {username}\n"  # เพิ่มชื่อผู้ใช้
+                    f"🛒 หมวดหมู่: {category} 📦\n"  # เพิ่มหมวดหมู่ที่เลือก
                     f"🛒 คำสั่งซื้อ ID: {order_data['order']} ✅\n"
                     f"💵 รวมราคาทั้งหมด: {total_price:.2f} บาท\n"
                     f"💳 เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท\n"
