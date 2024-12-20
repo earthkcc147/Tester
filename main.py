@@ -59,10 +59,10 @@ def print_welcome_message(username):
         f"🔋 แบตเตอรี่: {device_info['Battery']}\n"
         f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution']}\n"
         f"⚙️ พอร์ตที่เปิดใช้งาน:\n"
-            # แสดงข้อมูลพอร์ตที่เปิดใช้งาน
-            + "\n".join([f"  - ที่อยู่: {port['laddr']} -> {port['raddr']} สถานะ: {port['status']}, PID: {port['pid']}" for port in device_info['Open Ports']])
+        # แสดงข้อมูลพอร์ตที่เปิดใช้งาน
+        + "\n".join([f"  - ที่อยู่: {port['laddr']} -> {port['raddr']} สถานะ: {port['status']}, PID: {port['pid']}" for port in device_info['Open Ports']])
         
-        "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
+        + "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
     # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
