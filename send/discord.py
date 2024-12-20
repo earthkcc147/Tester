@@ -7,6 +7,7 @@ import os
 load_dotenv()
 
 # ดึงค่า Bot Token และ Channel ID จาก .env
+DISCORD_API_URL = os.getenv("DISCORD_API_URL") 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
 
