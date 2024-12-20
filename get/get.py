@@ -66,21 +66,25 @@ def get_battery_status():
     except Exception:
         return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
 
-# ฟังก์ชันรวมข้อมูลทั้งหมด
+# ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
     location = get_location(ip)
     device = get_device_info()
     battery = get_battery_status()
     gpu = get_gpu_info()
-    browser = get_browser_info()
+
+    # ปรับรูปแบบความละเอียดหน้าจอ
+    screen_resolution = device.get("screen_resolution")
+    if isinstance(screen_resolution, os.terminal_size):
+        screen_resolution = f"{screen_resolution.columns} x {screen_resolution.lines}"
 
     return {
         "IP": ip,
         "Location": location,
         "Device": device,
-        "Battery": battery,
+        "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
         "GPU": gpu,
-        "Browser": browser,
-        "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Screen Resolution": screen_resolution,
+        "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
