@@ -30,4 +30,4 @@ def send_discord_message(message):
 # ฟังก์ชันเพื่อรับเวลาปัจจุบันในรูปแบบที่ต้องการ
 def get_current_time():
     now = datetime.now()
-    return now.strftime("%Y-%m-%d %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
+    return now.strftime("%d-%m-%Y %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
