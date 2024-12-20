@@ -221,8 +221,8 @@ def choose_product(category):
             print(f"   📦 จำนวนสูงสุด: {product['max_quantity']} ชิ้น")
             print(f"   💵 ราคาต่อหน่วย: {product['price_per_rate']:.2f} บาท")
 
-            link = input(f"🔗 กรุณากรอกลิงก์ที่ต้องการ (ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): ")
-            quantity = int(input(f"🔢 กรุณากรอกจำนวนที่ต้องการซื้อ (ระหว่าง {product['min_quantity']} และ {product['max_quantity']}): "))
+            link = input(f"\n🔗 กรุณากรอกลิงก์ที่ต้องการ\n   (💡 ตัวอย่าง: {product['example_link'] if 'example_link' in product else 'ไม่มีตัวอย่าง'}): \n👉 ")
+            quantity = int(input(f"\n🔢 กรุณากรอกจำนวนที่ต้องการซื้อ\n   (📦 ระหว่าง {product['min_quantity']} และ {product['max_quantity']}): \n👉 "))
 
             if product['min_quantity'] <= quantity <= product['max_quantity']:
                 place_order(category, product_key, quantity, link)
