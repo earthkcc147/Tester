@@ -1,8 +1,16 @@
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+# โหลดค่าจากไฟล์ .env
+load_dotenv()
+
+# ดึงค่า Webhook URL จาก .env
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 # Discord Webhook URL
-DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL"  # แทนที่ด้วย Webhook URL ของคุณ
+# DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL"  # แทนที่ด้วย Webhook URL ของคุณ
 
 # ฟังก์ชันเพื่อส่งข้อความไปยัง Discord
 def send_discord_message(message):
