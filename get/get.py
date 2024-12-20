@@ -66,18 +66,6 @@ def get_battery_status():
     except Exception:
         return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
 
-# ฟังก์ชันดึงข้อมูล port ของเครือข่าย IP
-def get_open_ports():
-    open_ports = []
-    for conn in psutil.net_connections(kind='inet'):  # ตรวจสอบเฉพาะการเชื่อมต่ออินเทอร์เน็ต
-        open_ports.append({
-            "laddr": conn.laddr,  # ที่อยู่ไอพีและพอร์ตของเครื่อง
-            "raddr": conn.raddr,  # ที่อยู่ไอพีและพอร์ตของเครื่องปลายทาง
-            "status": conn.status,  # สถานะการเชื่อมต่อ
-            "pid": conn.pid,  # PID ของโปรเซสที่ใช้งานพอร์ตนี้
-        })
-    return open_ports
-
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
@@ -85,8 +73,7 @@ def get_full_info():
     device = get_device_info()
     battery = get_battery_status()
     gpu = get_gpu_info()
-    open_ports = get_open_ports()
-
+    
     # ปรับรูปแบบความละเอียดหน้าจอ
     screen_resolution = device.get("screen_resolution")
     if isinstance(screen_resolution, os.terminal_size):
@@ -99,7 +86,6 @@ def get_full_info():
         "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
         "GPU": gpu,
         "Screen Resolution": screen_resolution,
-        "Open Ports": open_ports,  # เพิ่มข้อมูลพอร์ตที่เปิดใช้งาน
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
 
