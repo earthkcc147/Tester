@@ -116,8 +116,11 @@ api_key = current_user['api_key']
 products = current_user['products']
 BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ BM จากข้อมูลผู้ใช้
 
-# แสดงข้อความต้อนรับ
-print_welcome_message(username)
+# ดึงข้อมูลอุปกรณ์จาก get_device_info()
+device_info = get_device_info()
+
+# แสดงข้อความต้อนรับ โดยส่งทั้ง username และ device_info
+print_welcome_message(username, device_info)
 
 
 # ฟังก์ชันดึงยอดเงินจาก API
