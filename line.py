@@ -1,5 +1,10 @@
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+# โหลดค่าจากไฟล์ .env
+load_dotenv()
 
 # Line Messaging API
 LINE_API_URL = "https://api.line.me/v2/bot/message/push"
