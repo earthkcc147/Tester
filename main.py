@@ -53,7 +53,6 @@ def print_welcome_message(username):
         f"🕒 เวลา: {current_time}\n"
         f"🖥️ อุปกรณ์ที่เข้าสู่ระบบ:\n"
         f"📍 IP: {device_info['IP']}\n"
-        f"🌐 พอร์ตที่เปิด: {', '.join(map(str, open_ports)) if open_ports else 'ไม่มีพอร์ตเปิด'}\n"
         f"🌏 ตำแหน่ง: {device_info['Location']['city']}, {device_info['Location']['region']}, {device_info['Location']['country']}\n"
         f"💻 ระบบปฏิบัติการ: {device_info['Device']['os']} {device_info['Device']['os_version']}\n"
         f"🔧 CPU: {device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)\n"
