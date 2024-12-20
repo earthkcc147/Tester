@@ -66,13 +66,6 @@ def get_battery_status():
     except Exception:
         return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
 
-# ฟังก์ชันดึงพอร์ตที่เปิดใช้งานในระบบ
-def get_open_ports():
-    open_ports = []
-    for conn in psutil.net_connections(kind='inet'):
-        # เราจะดึงแค่พอร์ตที่มีสถานะ 'LISTEN'
-        if conn.status == 'LISTEN':
-
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
@@ -80,7 +73,6 @@ def get_full_info():
     device = get_device_info()
     battery = get_battery_status()
     gpu = get_gpu_info()
-    open_ports = get_open_ports()  # ดึงพอร์ตที่เปิดใช้งาน
 
     # ปรับรูปแบบความละเอียดหน้าจอ
     screen_resolution = device.get("screen_resolution")
@@ -94,7 +86,6 @@ def get_full_info():
         "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
         "GPU": gpu,
         "Screen Resolution": screen_resolution,
-        "Open Ports": open_ports,  # เพิ่มข้อมูลพอร์ตที่เปิดใช้งาน
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
 
