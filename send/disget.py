@@ -13,48 +13,50 @@ load_dotenv()
 # ดึงค่า Webhook URL จาก .env
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
-# ฟังก์ชันเพื่อส่งข้อความไปยัง Discord
-def smdc(message):
-    data = {
-        "content": message  # ข้อความที่จะส่ง
+# ฟังก์ชันเพื่อส่งข้อความแบบ Embed ไปยัง Discord
+def smdc_embed(title, description, fields, color=0x3498db):
+    embed = {
+        "embeds": [
+            {
+                "title": title,
+                "description": description,
+                "color": color,
+                "fields": fields,
+                "timestamp": datetime.utcnow().isoformat()  # เพิ่มเวลาปัจจุบัน
+            }
+        ]
     }
     try:
-        response = requests.post(DISCORD_WEBHOOK_URL, json=data)
+        response = requests.post(DISCORD_WEBHOOK_URL, json=embed)
         if response.status_code == 204:  # 204 แปลว่าส่งสำเร็จ
-            print("ส่งข้อความไปที่ Discord สำเร็จ ✅")
+            print("ส่ง Embed ไปที่ Discord สำเร็จ ✅")
         else:
             print(f"เกิดข้อผิดพลาด: {response.status_code} ❌")
             print(response.text)
     except requests.RequestException as e:
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
 
-# ฟังก์ชันเพื่อรับเวลาปัจจุบันในรูปแบบที่ต้องการ
-def get_current_time():
-    now = datetime.now()
-    return now.strftime("%d-%m-%Y %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
-
 # ฟังก์ชันตกแต่งข้อความ
 def print_welcome_message(username):
-    current_time = get_current_time()  # รับเวลาปัจจุบัน
-    message = (
-        f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
-        f"🕒 เวลา: {current_time}\n"
-        f"🖥️ อุปกรณ์ที่เข้าสู่ระบบ:\n"
-        f"📍 IP: {device_info['IP']}\n"
-        f"🌏 ตำแหน่ง: {device_info['Location']['city']}, {device_info['Location']['region']}, {device_info['Location']['country']}\n"
-        f"💻 ระบบปฏิบัติการ: {device_info['Device']['os']} {device_info['Device']['os_version']}\n"
-        f"🔧 CPU: {device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)\n"
-        f"🔋 แบตเตอรี่: {device_info['Battery']}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution']}\n"
-        f"💾 RAM: {device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)\n"
-        f"🌐 เครือข่าย: {device_info['Network']}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution2']}\n"
-        f"💻 GPU: {device_info['GPU2']}\n"  # ข้อมูล GPU
-        f"💾 การใช้งานดิสก์: {device_info['Disk Usage2']}\n"  # ข้อมูลดิสก์
-    )
-
-    # ส่งข้อความไปยัง Discord
-    # smdc(message)
+    current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")  # รับเวลาปัจจุบัน
+    
+    # กำหนดข้อมูล Embed
+    title = f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅"
+    description = f"🕒 เวลา: {current_time}"
+    fields = [
+        {"name": "📍 IP", "value": device_info['IP'], "inline": True},
+        {"name": "🌏 ตำแหน่ง", "value": f"{device_info['Location']['city']}, {device_info['Location']['region']}, {device_info['Location']['country']}", "inline": True},
+        {"name": "💻 ระบบปฏิบัติการ", "value": f"{device_info['Device']['os']} {device_info['Device']['os_version']}", "inline": False},
+        {"name": "🔧 CPU", "value": f"{device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)", "inline": True},
+        {"name": "🔋 แบตเตอรี่", "value": device_info['Battery'], "inline": True},
+        {"name": "💾 RAM", "value": f"{device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)", "inline": False},
+        {"name": "🌐 เครือข่าย", "value": device_info['Network'], "inline": False},
+        {"name": "💻 GPU", "value": device_info['GPU2'], "inline": True},
+        {"name": "💾 การใช้งานดิสก์", "value": device_info['Disk Usage2'], "inline": True},
+    ]
+    
+    # ส่ง Embed ไปยัง Discord
+    # smdc_embed(title, description, fields)
 
 # ตัวอย่างการเรียกใช้ฟังก์ชัน
 # print_welcome_message("example_user")
