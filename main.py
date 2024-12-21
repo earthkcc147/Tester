@@ -94,7 +94,7 @@ def login_screen():
 
 # เรียกใช้ฟังก์ชันเคลียร์คอนโซล
 clear_console()
-flashy_message()
+
 # แสดงหน้าล็อคอิน
 login_screen()
 
@@ -118,6 +118,7 @@ BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ 
 
 # แสดงข้อความต้อนรับ
 print_welcome_message(username)
+flashy_message()
 
 
 # ฟังก์ชันดึงยอดเงินจาก API
