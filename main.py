@@ -62,10 +62,7 @@ def print_welcome_message(username):
         f"💾 RAM: {device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)\n"
         f"🌐 เครือข่าย: {device_info['Network']}\n"
 
-        f"🌐 ข้อมูลเครือข่าย: {device_info['Network2']}\n"
-        f"💾 การใช้ดิสก์: {device_info['Disk Usage']}\n"
-
-
+        
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
     # ส่งข้อความไปยัง Discord และ Line
