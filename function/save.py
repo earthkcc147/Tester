@@ -51,10 +51,10 @@ def save_message_to_file(message, repo_owner, repo_name, file_path, token):
 
 # ข้อความที่จะบันทึก
 # message = {
-    "username": "user123",
-    "text": "นี่คือข้อความที่ต้องการบันทึก",
-    "timestamp": "21-12-2024 18:38:05"
-}
+    # "username": "user123",
+    # "text": "นี่คือข้อความที่ต้องการบันทึก",
+    # "timestamp": "21-12-2024 18:38:05"
+# }
 
 # เรียกใช้งานฟังก์ชัน
 # save_message_to_file(message, repo_owner, repo_name, file_path, token)
