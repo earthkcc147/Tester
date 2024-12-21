@@ -217,7 +217,17 @@ def place_order(category, product_key, quantity, link):
                 send_line_message(message)
 
                 # บันทึกคำสั่งซื้อไปยังไฟล์
-                save_order_to_file({
+                # save_order_to_file({
+                    # "order_id": order_data['order'],
+                    # "category": category,
+                    # "product": product['description'],
+                    # "quantity": quantity,
+                    # "total_price": total_price,
+                    # "remaining_balance": remaining_balance,
+                    # "timestamp": current_time,
+                # })
+
+                order_data = {
                     "order_id": order_data['order'],
                     "category": category,
                     "product": product['description'],
@@ -225,7 +235,9 @@ def place_order(category, product_key, quantity, link):
                     "total_price": total_price,
                     "remaining_balance": remaining_balance,
                     "timestamp": current_time,
-                })
+                }
+                # บันทึกคำสั่งซื้อ
+                save_order_to_file(order_data, repo_owner, repo_name, file_path, token)
 
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
