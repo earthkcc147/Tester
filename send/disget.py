@@ -36,6 +36,12 @@ def smdc_embed(title, description, fields, color=0x3498db):
     except requests.RequestException as e:
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
 
+# ฟังก์ชันเพื่อรับเวลาปัจจุบันในรูปแบบที่ต้องการ
+def get_current_time():
+    now = datetime.now()
+    return now.strftime("%d-%m-%Y %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
+
+
 # ฟังก์ชันตกแต่งข้อความ
 def print_welcome_message(username):
     current_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")  # รับเวลาปัจจุบัน
