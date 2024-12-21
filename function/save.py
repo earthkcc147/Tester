@@ -44,15 +44,5 @@ def save_order_to_file(order_data, repo_owner, repo_name, file_path, token):
     else:
         print(f"เกิดข้อผิดพลาด: {update_response.json()}")
 
-# ทดสอบการทำงาน
-order_data = {
-    "order_id": "12345",
-    "category": "Electronics",
-    "product": "Smartphone XYZ",
-    "quantity": 1,
-    "total_price": 999.99,
-    "remaining_balance": 500.00,
-    "timestamp": "2024-12-21 12:00:00"
-}
 
 # save_order_to_file(order_data, repo_owner, repo_name, file_path, token)
