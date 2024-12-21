@@ -60,21 +60,6 @@ def print_welcome_message(username):
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
         f"🕒 เวลา: {current_time}\n"
-        f"🖥️ อุปกรณ์ที่เข้าสู่ระบบ:\n"
-        f"📍 IP: {device_info['IP']}\n"
-        f"🌏 ตำแหน่ง: {device_info['Location']['city']}, {device_info['Location']['region']}, {device_info['Location']['country']}\n"
-        f"💻 ระบบปฏิบัติการ: {device_info['Device']['os']} {device_info['Device']['os_version']}\n"
-        f"🔧 CPU: {device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)\n"
-        f"🔋 แบตเตอรี่: {device_info['Battery']}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution']}\n"
-
-        f"💾 RAM: {device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)\n"
-        f"🌐 เครือข่าย: {device_info['Network']}\n"
-
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution2']}\n"
-        f"💻 GPU: {device_info['GPU2']}\n"  # ข้อมูล GPU
-        f"💾 การใช้งานดิสก์: {device_info['Disk Usage2']}\n"  # ข้อมูลดิสก์
-
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
         
     )
