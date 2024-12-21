@@ -218,6 +218,7 @@ def place_order(category, product_key, quantity, link):
 
                 # บันทึกคำสั่งซื้อไปยังไฟล์
                 save_order_to_file({
+                    "name": username
                     "order_id": order_data['order'],
                     "category": category,
                     "product": product['description'],
