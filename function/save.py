@@ -1,13 +1,13 @@
 import json
 import requests
-import os
+import base64
 
 repo_owner = "earthkcc147"  # แทนที่ด้วยชื่อผู้ใช้ GitHub ของคุณ
 repo_name = "GMR-STORE"  # แทนที่ด้วยชื่อ repository ของคุณ
 file_path = "save.json"  # เส้นทางของไฟล์ใน repository
 token = "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"  # แทนที่ด้วย GitHub token ที่สร้าง
 
-def save_order_to_file(order, repo_owner, repo_name, file_path, token):
+def save_message_to_file(message, repo_owner, repo_name, file_path, token):
     # ตรวจสอบว่าไฟล์ save.json มีอยู่ใน GitHub หรือไม่
     url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{file_path}'
 
@@ -21,26 +21,25 @@ def save_order_to_file(order, repo_owner, repo_name, file_path, token):
         file_sha = file_info['sha']
 
         # ใช้ base64 decoder เพื่อ decode ข้อมูลจาก GitHub
-        import base64
         file_data = base64.b64decode(file_content).decode('utf-8')
 
-        orders = json.loads(file_data)
+        messages = json.loads(file_data)
     else:
         # ถ้าไฟล์ไม่มี ให้สร้างไฟล์ใหม่
-        orders = []
+        messages = []
 
-    # เพิ่มข้อมูลคำสั่งซื้อใหม่
-    orders.append(order)
+    # เพิ่มข้อความใหม่
+    messages.append(message)
 
     # อัปโหลดข้อมูลใหม่ไปยัง GitHub
-    new_content = json.dumps(orders, ensure_ascii=False, indent=4)
+    new_content = json.dumps(messages, ensure_ascii=False, indent=4)
     encoded_content = base64.b64encode(new_content.encode('utf-8')).decode('utf-8')
 
     # ส่งคำขอ PUT ไปยัง GitHub API เพื่ออัปเดตไฟล์
     update_data = {
-        'message': 'Update save.json with new order data',
+        'message': 'Update save.json with new message data',
         'content': encoded_content,
-        'sha': file_sha  # ให้แน่ใจว่าใช้ SHA ของไฟล์เดิม
+        'sha': file_info['sha'] if response.status_code == 200 else None
     }
 
     update_response = requests.put(url, json=update_data, headers={'Authorization': f'token {token}'})
@@ -50,18 +49,12 @@ def save_order_to_file(order, repo_owner, repo_name, file_path, token):
     else:
         print(f"เกิดข้อผิดพลาด: {update_response.json()}")
 
-
-# ตัวอย่างข้อมูลคำสั่งซื้อ
-# order = {
-    "order_id": 24241536,
-    "category": "facebook",
-    "product": "สินค้าใหม่",
-    "quantity": 10,
-    "total_price": 5.87,
-    "remaining_balance": 836.13,
-    "timestamp": "21-12-2024 18:38:05",
-    "username": "user123"
+# ข้อความที่จะบันทึก
+# message = {
+    "username": "user123",
+    "text": "นี่คือข้อความที่ต้องการบันทึก",
+    "timestamp": "21-12-2024 18:38:05"
 }
 
 # เรียกใช้งานฟังก์ชัน
-# save_order_to_file(order, repo_owner, repo_name, file_path, token)
+# save_message_to_file(message, repo_owner, repo_name, file_path, token)
