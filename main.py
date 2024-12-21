@@ -304,7 +304,7 @@ def show_category_menu():
 while True:
     show_category_menu()
     try:
-        category_choice = int(input("🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
+        category_choice = int(input("\n🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
 
         if category_choice == 0:
             clear_console()
