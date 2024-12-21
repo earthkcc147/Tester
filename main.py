@@ -17,6 +17,8 @@ from function.save import save_order_to_file  # นำเข้าฟังก�
 
 from function.check_history import show_order_history
 
+from function.credit improt flashy_message
+
 
 device_info = get_full_info()
 
@@ -92,6 +94,7 @@ def login_screen():
 
 # เรียกใช้ฟังก์ชันเคลียร์คอนโซล
 clear_console()
+flashy_message()
 # แสดงหน้าล็อคอิน
 login_screen()
 
