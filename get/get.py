@@ -62,9 +62,10 @@ def get_battery_status():
         return {
             "percent": battery.percent,
             "charging": battery.power_plugged,
+            "time_left": str(datetime.timedelta(seconds=battery.secsleft)) if battery.secsleft != psutil.POWER_TIME_UNLIMITED else "ไม่สามารถคำนวณเวลาได้"
         }
     except Exception:
-        return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ"}
+        return {"percent": "ไม่ทราบ", "charging": "ไม่ทราบ", "time_left": "ไม่ทราบ"}
 
 
 # ฟังก์ชันดึงข้อมูลการใช้หน่วยความจำ (RAM)
@@ -90,6 +91,38 @@ def get_network_info():
 
 
 
+
+# ฟังก์ชันดึงข้อมูล GPU
+def get_gpu_info2():
+    try:
+        gpus = GPUtil.getGPUs()
+        return [{"name": gpu.name, "load": f"{gpu.load * 100:.2f}%", "memory": f"{gpu.memoryUsed}/{gpu.memoryTotal}MB"} for gpu in gpus]
+    except Exception:
+        return "ไม่สามารถดึงข้อมูล GPU ได้ (อาจไม่มี GPU)"
+
+# ฟังก์ชันดึงข้อมูลความละเอียดหน้าจอ
+def get_screen_resolution2():
+    try:
+        monitors = get_monitors()
+        resolutions = [{"monitor": monitor.name, "resolution": f"{monitor.width} x {monitor.height}"} for monitor in monitors]
+        return resolutions if resolutions else "ไม่พบหน้าจอ"
+    except Exception:
+        return "ไม่สามารถดึงข้อมูลความละเอียดหน้าจอ"
+
+# ฟังก์ชันดึงข้อมูลพื้นที่ดิสก์
+def get_disk_usage2():
+    try:
+        total, used, free = shutil.disk_usage("/")
+        return {
+            "total": f"{round(total / (1024 ** 3), 2)} GB",
+            "used": f"{round(used / (1024 ** 3), 2)} GB",
+            "free": f"{round(free / (1024 ** 3), 2)} GB",
+            "percent": f"{psutil.disk_usage('/').percent}%",
+        }
+    except Exception:
+        return "ไม่สามารถดึงข้อมูลดิสก์"
+
+
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
@@ -97,9 +130,13 @@ def get_full_info():
     device = get_device_info()
     battery = get_battery_status()
     gpu = get_gpu_info()
-
     memory = get_memory_usage()
     network = get_network_info()
+
+    
+    gpu = get_gpu_info2()
+    disk_usage = get_disk_usage2()
+    screen_resolution = get_screen_resolution2()
 
 
     # ปรับรูปแบบความละเอียดหน้าจอ
@@ -114,11 +151,14 @@ def get_full_info():
         "Battery": battery if battery.get("percent") != "ไม่ทราบ" else "ไม่มีข้อมูลแบตเตอรี่",
         "GPU": gpu,
         "Screen Resolution": screen_resolution,
-
         "Memory": memory,
         "Network": network,
 
-
+        
+        "GPU": gpu2,
+        "Disk Usage": disk_usage2,
+        "Screen Resolution": screen_resolution2,      
+        
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
 
