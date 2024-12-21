@@ -59,8 +59,8 @@ def print_welcome_message(username):
         f"🔋 แบตเตอรี่: {device_info['Battery']}\n"
         f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution']}\n"
 
-        f"💾 RAM: {device_info['Memory']['total']} (Used: {device_info['Memory']['used']}, Free: {device_info['Memory']['free']}, Usage: {device_info['Memory']['percent']})\n"
-        f"🌐 เครือข่าย: {device_info['Network']}\n"
+        f"  - 💾 **RAM:** {device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)\n"
+        f"  - 🌐 **เครือข่าย:** {device_info['Network']}\n"
         
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
     )
