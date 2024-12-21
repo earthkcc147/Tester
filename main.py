@@ -47,6 +47,11 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
+
+    # ดึงยอดเงินจาก API
+    balance = get_balance(api_key)
+    # เครดิต
+    adjusted_balance = round(balance * BM, 2)
     
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
@@ -68,7 +73,7 @@ def print_welcome_message(username):
 
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
         f"💰 ยอดเงิน: {balance:.2f} บาท\n"
-        f"💰 ยอดเงิน: {adjusted_balance:.2f} บาท\n"
+        f"💰 เครดิต: {adjusted_balance:.2f} เครดิต\n"
     )
     # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
