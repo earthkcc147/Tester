@@ -74,7 +74,8 @@ def print_welcome_message(username):
     # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
     send_line_message(message)
-    smdc(message)
+    smdc_embed(embed_message)
+    # smdc(message)
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
 def login_screen():
