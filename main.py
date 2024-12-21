@@ -16,9 +16,6 @@ from function.save import save_order_to_file  # นำเข้าฟังก�
 
 from function.check_history import show_order_history
 
-from function.autoupdate import autoupdate_repository
-autoupdate_repository()
-
 
 device_info = get_full_info()
 
