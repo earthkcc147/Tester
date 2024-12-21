@@ -10,7 +10,7 @@ from datetime import datetime
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
-from send.disget import smdc, get_current_time
+from send.disget import smdc, get_current_time, send
 
 from function.get import get_full_info  # นำเข้า get_device_info จาก get.py
 from function.save import save_order_to_file  # นำเข้าฟังก์ชันที่สร้างขึ้น
