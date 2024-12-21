@@ -24,7 +24,7 @@ def show_order_history(username):
                 print(f"   เวลาที่สั่งซื้อ: {order['timestamp']}")
                 print("-" * 60)  # เส้นแบ่งระหว่างคำสั่งซื้อ
         else:
-            print(f"❌ ไม่พบประวัติการสั่งซื้อสำหรับชื่อผู้ใช้นี้: {username}")
+            print(f"❌ ไม่พบประวัติการสั่งซื้อของคุณ")
     else:
         print("❌ ไม่พบไฟล์ save.json.")
 
