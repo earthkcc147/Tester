@@ -47,7 +47,9 @@ def clear_console():
 def print_welcome_message(username):
     print(Fore.GREEN + Style.BRIGHT + f"\nยินดีต้อนรับ {username}!\n")
     print(Fore.YELLOW + "เข้าสู่ระบบสำเร็จ ✅\n")
-
+    
+    current_user = users_data[username]
+    api_key = current_user['api_key']
     # ดึงยอดเงินจาก API
     balance = get_balance(api_key)
     # เครดิต
