@@ -13,6 +13,8 @@ from send.disget import smdc, get_current_time
 
 from get.get import get_full_info  # นำเข้า get_device_info จาก get.py
 
+from function.save import import save_order_to_file  # นำเข้าฟังก์ชันที่สร้างขึ้น
+
 device_info = get_full_info()
 
 # เริ่มต้น colorama
@@ -209,6 +211,17 @@ def place_order(category, product_key, quantity, link):
                 # ส่งข้อความไปยัง Discord และ Line
                 send_discord_message(message)
                 send_line_message(message)
+
+                # บันทึกคำสั่งซื้อไปยังไฟล์
+                save_order_to_file({
+                    "order_id": order_data['order'],
+                    "category": category,
+                    "product": product['description'],
+                    "quantity": quantity,
+                    "total_price": total_price,
+                    "remaining_balance": remaining_balance,
+                    "timestamp": current_time,
+                })
 
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
