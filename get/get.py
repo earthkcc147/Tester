@@ -26,52 +26,17 @@ def get_location(ip):
         return {"city": "ไม่ทราบ", "region": "ไม่ทราบ", "country": "ไม่ทราบ"}
 
 
-import platform
-import psutil
-from user_agents import parse
-
 # ฟังก์ชันดึงข้อมูลอุปกรณ์
-def get_device_info(user_agent):
-    # วิเคราะห์ User-Agent
-    ua = parse(user_agent)
-    
-    # ตรวจสอบประเภทอุปกรณ์
-    if ua.is_mobile:
-        device_type = "Mobile"
-    elif ua.is_tablet:
-        device_type = "Tablet"
-    elif ua.is_pc:
-        device_type = "PC"
-    elif ua.is_bot:
-        device_type = "Bot"
-    else:
-        device_type = "Other"
-
-    # ตรวจสอบระบบปฏิบัติการ
-    if ua.os.family.lower() in ["android", "ios"]:
-        os_type = ua.os.family
-        os_version = ua.os.version_string
-    else:
-        os_type = platform.system()
-        os_version = platform.version()
-
-    # ข้อมูลอุปกรณ์
-    device_info = {
-        "device_type": device_type,
-        "os": os_type,
-        "os_version": os_version,
+def get_device_info():
+    return {
+        "os": platform.system(),
+        "os_version": platform.version(),
         "platform": platform.platform(),
         "processor": platform.processor(),
         "cpu_count": psutil.cpu_count(logical=True),
         "memory": f"{round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB",
     }
 
-    # หากเป็น Mobile/Tablet แสดงชื่ออุปกรณ์เพิ่มเติม
-    if ua.is_mobile or ua.is_tablet:
-        device_info["brand"] = ua.device.brand or "Unknown"
-        device_info["model"] = ua.device.model or "Unknown"
-
-    return device_info
 
 # ฟังก์ชันดึงข้อมูล GPU (รองรับ Termux/Pydroid3 ที่ไม่มี GPU)
 def get_gpu_info():
