@@ -3,7 +3,8 @@ import json
 import requests
 import webbrowser
 from dotenv import load_dotenv
-from colorama import init, Fore, Style
+from colorama import init, Fore, Back, Style
+import time
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 from datetime import datetime
 
