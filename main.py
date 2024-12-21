@@ -227,6 +227,10 @@ def place_order(category, product_key, quantity, link):
                     # "timestamp": current_time,
                 # })
 
+                repo_owner = os.getenv("REPO_OWNER")
+                repo_name = os.getenv("REPO_NAME")
+                file_path = os.getenv("FILE_PATH")
+                token = os.getenv("GITHUB_TOKEN")
                 order_data = {
                     "order_id": order_data['order'],
                     "category": category,
