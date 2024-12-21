@@ -18,5 +18,6 @@ def save_order_to_file(order_data):
     # บันทึกข้อมูลกลับไปยังไฟล์
     with open('save.json', 'w', encoding='utf-8') as f:
         json.dump(orders, f, ensure_ascii=False, indent=4)
+        print("บันทึกคำสั่งซื้อเรียบร้อยแล้ว!")
 
 
