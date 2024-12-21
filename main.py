@@ -62,7 +62,7 @@ def print_welcome_message(username):
         f"💾 RAM: {device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)\n"
         f"🌐 เครือข่าย: {device_info['Network']}\n"
 
-        f"🌐 เครือข่าย: {device_info['Network2']}\n"
+        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution2']}\n"
         f"💻 GPU: {device_info['GPU2']}\n"  # ข้อมูล GPU
         f"💾 การใช้งานดิสก์: {device_info['Disk Usage2']}\n"  # ข้อมูลดิสก์
 
