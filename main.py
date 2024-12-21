@@ -294,6 +294,7 @@ def show_category_menu():
     print("🎵 2. TikTok")
     print("📸 3. Instagram")
     print("💬 4. Discord")
+    print("🔍 98. ดูประวัติการสั่งซื้อ")
     print("📞 99. เพื่อติดต่อแอดมิน")
     print("🚪 0. ออกจากโปรแกรม")
 
@@ -314,6 +315,10 @@ while True:
             choose_product("instagram")
         elif category_choice == 4:
             choose_product("discord")
+        elif category_choice == 98:
+            # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
+            # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
+            show_order_history(username)
         elif category_choice == 99:
             print("📍 ติดต่อแอดมิน: https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
         else:
