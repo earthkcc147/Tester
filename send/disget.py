@@ -62,7 +62,7 @@ def print_welcome_message(username):
     ]
     
     # เรียก smdc_embed พร้อมส่งข้อมูล
-    # smdc_embed(title, description, fields)
+    smdc_embed(title, description, fields)
     
 # ตัวอย่างการเรียกใช้ฟังก์ชัน
 # print_welcome_message("example_user")
