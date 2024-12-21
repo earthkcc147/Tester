@@ -118,7 +118,6 @@ BM = float(current_user.get('BM', 100))  # ดึงค่าตัวคูณ 
 
 # แสดงข้อความต้อนรับ
 print_welcome_message(username)
-flashy_message()
 
 
 # ฟังก์ชันดึงยอดเงินจาก API
@@ -288,7 +287,8 @@ def show_category_menu():
     balance = get_balance(api_key)
     if balance is not None:
         adjusted_balance = round(balance * BM, 2)
-        print("📍 เติมเครดิต ติดต่อแอดมิน: https://www.facebook.com/earthkcc147?mibextid=ZbWKwL\n")
+        clear_console()
+        flashy_message()
         print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
