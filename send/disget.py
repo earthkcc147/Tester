@@ -34,7 +34,7 @@ def get_current_time():
     return now.strftime("%d-%m-%Y %H:%M:%S")  # รูปแบบเวลา: YYYY-MM-DD HH:mm:ss
 
 # ฟังก์ชันตกแต่งข้อความ
-def print_welcome_message(username):
+def send(username):
     current_time = get_current_time()  # รับเวลาปัจจุบัน
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
@@ -54,8 +54,8 @@ def print_welcome_message(username):
     )
 
     # ส่งข้อความไปยัง Discord
-    # smdc(message)
+    smdc(message)
 
 # ตัวอย่างการเรียกใช้ฟังก์ชัน
-# print_welcome_message("example_user")
+# send("example_user")
 
