@@ -283,6 +283,7 @@ def show_category_menu():
     balance = get_balance(api_key)
     if balance is not None:
         adjusted_balance = round(balance * BM, 2)
+        print("📍 เติมเครดิต ติดต่อแอดมิน: https://www.facebook.com/earthkcc147?mibextid=ZbWKwL\n")
         print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
@@ -291,8 +292,7 @@ def show_category_menu():
     print("🎵 2. TikTok")
     print("📸 3. Instagram")
     print("💬 4. Discord")
-    print("🔍 98. ดูประวัติการสั่งซื้อ")
-    print("📞 99. เพื่อติดต่อแอดมิน")
+    print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
 
 # ลูปหลัก
@@ -312,12 +312,11 @@ while True:
             choose_product("instagram")
         elif category_choice == 4:
             choose_product("discord")
-        elif category_choice == 98:
+        elif category_choice == 99:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
             show_order_history(username)
-        elif category_choice == 99:
-            print("📍 ติดต่อแอดมิน: https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+        
         else:
             print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองอีกครั้ง!")
     except ValueError:
