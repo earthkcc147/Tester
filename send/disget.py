@@ -91,7 +91,7 @@ def print_welcome_message(username):
     }
 
     # ส่ง Embed ไปยัง Discord
-    # smdc(embed_message)
+    smdc(embed_message)
 
 # ตัวอย่างการเรียกใช้ฟังก์ชัน
 # print_welcome_message("example_user")
