@@ -134,9 +134,9 @@ def get_full_info():
     network = get_network_info()
 
     
-    gpu = get_gpu_info2()
-    disk_usage = get_disk_usage2()
-    screen_resolution = get_screen_resolution2()
+    gpu2 = get_gpu_info2()
+    disk_usage2 = get_disk_usage2()
+    screen_resolution2 = get_screen_resolution2()
 
 
     # ปรับรูปแบบความละเอียดหน้าจอ
@@ -155,9 +155,9 @@ def get_full_info():
         "Network": network,
 
         
-        "GPU": gpu2,
-        "Disk Usage": disk_usage2,
-        "Screen Resolution": screen_resolution2,      
+        "GPU2": gpu2,
+        "Disk Usage2": disk_usage2,
+        "Screen Resolution2": screen_resolution2,      
         
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
