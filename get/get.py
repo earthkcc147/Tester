@@ -89,35 +89,6 @@ def get_network_info():
         return "ไม่สามารถดึงข้อมูลเครือข่าย"
 
 
-# ฟังก์ชันดึงข้อมูลการเชื่อมต่อเครือข่าย
-def get_network_info2():
-    try:
-        network = psutil.net_if_addrs()
-        network_info = {}
-        for interface, addrs in network.items():
-            network_info[interface] = [{"address": addr.address, "netmask": addr.netmask} for addr in addrs]
-        return network_info
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลเครือข่ายได้"
-
-
-# ฟังก์ชันดึงข้อมูลการใช้ดิสก์
-def get_disk_usage():
-    try:
-        partitions = psutil.disk_partitions()
-        disk_info = {}
-        for partition in partitions:
-            usage = psutil.disk_usage(partition.mountpoint)
-            disk_info[partition.device] = {
-                "total": f"{round(usage.total / (1024 ** 3), 2)} GB",
-                "used": f"{round(usage.used / (1024 ** 3), 2)} GB",
-                "free": f"{round(usage.free / (1024 ** 3), 2)} GB",
-                "percent": f"{usage.percent}%",
-            }
-        return disk_info
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลการใช้ดิสก์ได้"
-
 
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
@@ -130,8 +101,6 @@ def get_full_info():
     memory = get_memory_usage()
     network = get_network_info()
 
-    network2 = get_network_info2()  # ข้อมูลเครือข่าย
-    disk = get_disk_usage()  # ข้อมูลการใช้ดิสก์
 
     # ปรับรูปแบบความละเอียดหน้าจอ
     screen_resolution = device.get("screen_resolution")
@@ -149,8 +118,6 @@ def get_full_info():
         "Memory": memory,
         "Network": network,
 
-        "Network2": network2,  # เพิ่มข้อมูลเครือข่าย
-        "Disk Usage": disk,  # เพิ่มข้อมูลการใช้ดิสก์
 
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
