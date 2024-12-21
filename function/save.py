@@ -52,7 +52,7 @@ def save_order_to_file(order, repo_owner, repo_name, file_path, token):
 
 
 # ตัวอย่างข้อมูลคำสั่งซื้อ
-order = {
+# order = {
     "order_id": 24241536,
     "category": "facebook",
     "product": "สินค้าใหม่",
@@ -64,4 +64,4 @@ order = {
 }
 
 # เรียกใช้งานฟังก์ชัน
-save_order_to_file(order, repo_owner, repo_name, file_path, token)
+# save_order_to_file(order, repo_owner, repo_name, file_path, token)
