@@ -14,7 +14,7 @@ load_dotenv()
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 # ฟังก์ชันเพื่อส่งข้อความไปยัง Discord
-def smdis(message):
+def smdc(message):
     data = {
         "content": message  # ข้อความที่จะส่ง
     }
@@ -54,7 +54,7 @@ def print_welcome_message(username):
     )
 
     # ส่งข้อความไปยัง Discord
-    # smdis(message)
+    # smdc(message)
 
 # ตัวอย่างการเรียกใช้ฟังก์ชัน
 # print_welcome_message("example_user")
