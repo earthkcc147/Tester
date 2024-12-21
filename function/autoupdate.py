@@ -3,7 +3,7 @@ import os
 from colorama import Fore, Style
 from tqdm import tqdm
 
-def update_repository():
+def autoupdate_repository():
     repo_dir = '.'  # ระบุให้ใช้โฟลเดอร์ปัจจุบัน (Tester)
     repo_url = 'https://github.com/earthkcc147/Tester.git'
 
@@ -42,4 +42,4 @@ def update_repository():
         print(Fore.GREEN + "✔️ การ clone สำเร็จ!")
 
 # if __name__ == '__main__':
-    # update_repository()
+    # autoupdate_repository()
