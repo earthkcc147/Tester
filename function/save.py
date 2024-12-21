@@ -52,7 +52,7 @@ def save_order_to_file(order_data, repo_owner, repo_name, file_path, token):
 
 
 # เรียกใช้งานฟังก์ชัน
-save_order_to_file(order_data, repo_owner, repo_name, file_path, token)
+# save_order_to_file(order_data, repo_owner, repo_name, file_path, token)
 
 
 
