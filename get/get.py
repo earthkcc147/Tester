@@ -90,42 +90,6 @@ def get_network_info():
 
 
 
-# ฟังก์ชันดึงข้อมูลเครือข่าย (Network)
-def get_network_info2():
-    try:
-        network_info = psutil.net_if_addrs()
-        network_data = {}
-        for interface, addrs in network_info.items():
-            for addr in addrs:
-                if addr.family == socket.AF_INET:
-                    network_data[interface] = addr.address
-        return network_data
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลเครือข่ายได้"
-
-# ฟังก์ชันดึงข้อมูลการใช้งานดิสก์
-def get_disk_usage():
-    try:
-        disk_usage = shutil.disk_usage("/")
-        return {
-            "total": f"{disk_usage.total / (1024 ** 3):.2f} GB",
-            "used": f"{disk_usage.used / (1024 ** 3):.2f} GB",
-            "free": f"{disk_usage.free / (1024 ** 3):.2f} GB",
-            "percent": f"{disk_usage.percent}%",
-        }
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลการใช้งานดิสก์ได้"
-
-# ฟังก์ชันดึงข้อมูลเวลาการทำงานของเครื่อง
-def get_uptime():
-    try:
-        uptime_seconds = psutil.boot_time()
-        uptime = datetime.fromtimestamp(uptime_seconds)
-        return str(datetime.now() - uptime)
-    except Exception:
-        return "ไม่สามารถดึงข้อมูลเวลาการทำงานของเครื่องได้"
-
-
 # ฟังก์ชันปรับปรุงข้อมูล
 def get_full_info():
     ip = get_ip()
@@ -156,10 +120,6 @@ def get_full_info():
 
         "Memory": memory,
         "Network": network,
-
-        "Network2": network2,
-        "Disk Usage": disk,
-        "Uptime": uptime,
 
         "Timestamp": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
     }
