@@ -4,8 +4,8 @@ import requests
 # ฟังก์ชันดึงสถานะคำสั่งซื้อจาก API
 def get_order_status(order_id):
     # ใช้ค่า API URL จาก .env หรือตั้งค่าล่วงหน้า
-    api_url = os.getenv("API_URL", "https://your-api-url.com")  # ตั้งค่า API_URL
-    api_key = os.getenv("API_KEY", "your_api_key")  # ตั้งค่า API_KEY
+    api_url = os.getenv("API_URL")  # ตั้งค่า API_URL
+    api_key = os.getenv("API_KEY")  # ตั้งค่า API_KEY
     
     # ข้อมูลที่ใช้ในการร้องขอ
     params = {
