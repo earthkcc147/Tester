@@ -16,8 +16,13 @@ from function.get import get_full_info  # นำเข้า get_device_info จ
 from function.save import save_order_to_file  # นำเข้าฟังก์ชันที่สร้างขึ้น
 
 from function.check_history import show_order_history
-
 from function.credit import flashy_message
+
+from funtion.qr_wallet import download_file_from_google_drive
+
+# ใช้ฟังก์ชัน
+# download_url = "https://drive.google.com/uc?id=17vHFgWgYdq7ba8U6I_YKrCUyVXrehoAl&export=download"
+# save_path = "qr_image.jpg"  # เส้นทางที่ต้องการบันทึก
 
 
 device_info = get_full_info()
@@ -284,6 +289,7 @@ def show_category_menu():
     print("💬 4. Discord")
     print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
+    print("🚪 00. ให้กำลังใจ")
 
 # ลูปหลัก
 while True:
@@ -307,6 +313,8 @@ while True:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
             show_order_history(username)
+        elif category_choice == 00:
+            download_file_from_google_drive(download_url, save_path)
         
         else:
             print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองอีกครั้ง!")
