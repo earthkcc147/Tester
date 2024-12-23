@@ -19,6 +19,9 @@ from function.check_history import show_order_history
 
 from function.credit import flashy_message
 
+from function.sms import home
+import asyncio
+
 
 device_info = get_full_info()
 
@@ -282,6 +285,7 @@ def show_category_menu():
     print("🎵 2. TikTok")
     print("📸 3. Instagram")
     print("💬 4. Discord")
+    print("📱 98. ส่ง SMS")
     print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
 
@@ -303,6 +307,8 @@ while True:
             choose_product("instagram")
         elif category_choice == 4:
             choose_product("discord")
+        elif category_choice == 98
+            asyncio.run(home())
         elif category_choice == 99:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
