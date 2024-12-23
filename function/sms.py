@@ -64,10 +64,10 @@ def api1():
 			print(f"\x1b[92m{sms}")
 
 
-for i in range(jam):
-			threading.Thread(target=api1).start()
+# for i in range(jam):
+			# threading.Thread(target=api1).start()
 
-asyncio.run(home())
+# asyncio.run(home())
 
 
 
