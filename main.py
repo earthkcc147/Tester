@@ -307,7 +307,7 @@ while True:
             choose_product("instagram")
         elif category_choice == 4:
             choose_product("discord")
-        elif category_choice == 98
+        elif category_choice == 98:
             asyncio.run(home())
         elif category_choice == 99:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
