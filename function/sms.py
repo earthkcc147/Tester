@@ -64,7 +64,7 @@ def api1():
     print(f"\x1b[92m{sms}")
 
 # Call the `home` function
-asyncio.run(home())
+# asyncio.run(home())
 
 # Use `jam` globally
 for i in range(jam):
