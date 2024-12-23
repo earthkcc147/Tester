@@ -19,9 +19,7 @@ from function.check_history import show_order_history
 
 from function.credit import flashy_message
 
-from function.sms import home
-import asyncio
-
+from function.sms import home  # นำเข้าฟังก์ชัน home จาก sms.py
 
 device_info = get_full_info()
 
