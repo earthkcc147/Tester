@@ -52,6 +52,7 @@ async def home():
 		os.system("python smsflood.py")
 	else:
 		jam = int(input("\x1b[96m [AMOUNT-ATTACK] : \x1b[92m"))
+  return phone, jam
 		print()
 		print()
 		
