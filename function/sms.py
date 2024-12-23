@@ -66,5 +66,5 @@ def api1():
 for i in range(jam):
 			threading.Thread(target=api1).start()
 
-if __name__ == '__main__':
-	asyncio.run(home())
+# if __name__ == '__main__':
+	# asyncio.run(home())
