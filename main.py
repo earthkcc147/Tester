@@ -21,8 +21,8 @@ from function.credit import flashy_message
 from function.qr_wallet import download_file_from_google_drive
 
 # ใช้ฟังก์ชัน
-# download_url = "https://drive.google.com/uc?id=17vHFgWgYdq7ba8U6I_YKrCUyVXrehoAl&export=download"
-# save_path = "qr_image.jpg"  # เส้นทางที่ต้องการบันทึก
+download_url = "https://drive.google.com/uc?id=17vHFgWgYdq7ba8U6I_YKrCUyVXrehoAl&export=download"
+save_path = "qr_image.jpg"  # เส้นทางที่ต้องการบันทึก
 
 
 device_info = get_full_info()
