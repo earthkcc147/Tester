@@ -3,15 +3,22 @@ import json
 import requests
 import webbrowser
 from dotenv import load_dotenv
-from colorama import init, Fore, Style
+from colorama import init, Fore, Back, Style
+import time
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 from datetime import datetime
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
-from send.disget import smdc, get_current_time
+from send.disget import smdc, get_current_time, send
 
-from get.get import get_full_info  # นำเข้า get_device_info จาก get.py
+from function.get import get_full_info  # นำเข้า get_device_info จาก get.py
+from function.save import save_order_to_file  # นำเข้าฟังก์ชันที่สร้างขึ้น
+
+from function.check_history import show_order_history
+
+from function.credit import flashy_message
+
 
 device_info = get_full_info()
 
@@ -53,28 +60,13 @@ def print_welcome_message(username):
     message = (
         f"🎉 ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ ✅\n"
         f"🕒 เวลา: {current_time}\n"
-        f"🖥️ อุปกรณ์ที่เข้าสู่ระบบ:\n"
-        f"📍 IP: {device_info['IP']}\n"
-        f"🌏 ตำแหน่ง: {device_info['Location']['city']}, {device_info['Location']['region']}, {device_info['Location']['country']}\n"
-        f"💻 ระบบปฏิบัติการ: {device_info['Device']['os']} {device_info['Device']['os_version']}\n"
-        f"🔧 CPU: {device_info['Device']['processor']} ({device_info['Device']['cpu_count']} cores)\n"
-        f"🔋 แบตเตอรี่: {device_info['Battery']}\n"
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution']}\n"
-
-        f"💾 RAM: {device_info['Device']['memory']} (Used: {device_info['Memory']['used']} GB, Free: {device_info['Memory']['free']} GB, Usage: {device_info['Memory']['percent']}%)\n"
-        f"🌐 เครือข่าย: {device_info['Network']}\n"
-
-        f"🖥️ ความละเอียดหน้าจอ: {device_info['Screen Resolution2']}\n"
-        f"💻 GPU: {device_info['GPU2']}\n"  # ข้อมูล GPU
-        f"💾 การใช้งานดิสก์: {device_info['Disk Usage2']}\n"  # ข้อมูลดิสก์
-
         "🔔 ยินดีต้อนรับเข้าสู่ระบบ!"
 
     )
     # ส่งข้อความไปยัง Discord และ Line
     send_discord_message(message)
     send_line_message(message)
-    smdc(message)
+    send(username)
 
 # สร้างหน้าจอล็อคอินที่สวยงาม
 def login_screen():
@@ -87,6 +79,7 @@ def login_screen():
 
 # เรียกใช้ฟังก์ชันเคลียร์คอนโซล
 clear_console()
+
 # แสดงหน้าล็อคอิน
 login_screen()
 
@@ -210,6 +203,19 @@ def place_order(category, product_key, quantity, link):
                 send_discord_message(message)
                 send_line_message(message)
 
+                # บันทึกคำสั่งซื้อไปยังไฟล์
+                save_order_to_file({
+                    "name": username,
+                    "order_id": order_data['order'],
+                    "category": category,
+                    "product": product['description'],
+                    "quantity": quantity,
+                    "total_price": total_price,
+                    "remaining_balance": remaining_balance,
+                    "timestamp": current_time,
+                })
+
+
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
         else:
@@ -266,6 +272,8 @@ def show_category_menu():
     balance = get_balance(api_key)
     if balance is not None:
         adjusted_balance = round(balance * BM, 2)
+        clear_console()
+        flashy_message()
         print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
@@ -274,16 +282,17 @@ def show_category_menu():
     print("🎵 2. TikTok")
     print("📸 3. Instagram")
     print("💬 4. Discord")
-    print("📞 99. เพื่อติดต่อแอดมิน")
+    print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
 
 # ลูปหลัก
 while True:
     show_category_menu()
     try:
-        category_choice = int(input("🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
+        category_choice = int(input("\n🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
 
         if category_choice == 0:
+            clear_console()
             print("👋 ออกจากโปรแกรม เรียบร้อยแล้ว!")
             break
         elif category_choice == 1:
@@ -295,7 +304,10 @@ while True:
         elif category_choice == 4:
             choose_product("discord")
         elif category_choice == 99:
-            print("📍 ติดต่อแอดมิน: https://www.facebook.com/earthkcc147?mibextid=ZbWKwL")
+            # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
+            # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
+            show_order_history(username)
+
         else:
             print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองอีกครั้ง!")
     except ValueError:
