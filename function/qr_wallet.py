@@ -20,6 +20,6 @@ def download_file_from_google_drive(url, save_path):
         print(f"❌ เกิดข้อผิดพลาด: {str(e)}")
 
 # ใช้ฟังก์ชัน
-download_url = "https://drive.google.com/uc?id=17vHFgWgYdq7ba8U6I_YKrCUyVXrehoAl&export=download"
-save_path = "qr_image.jpg"  # เส้นทางที่ต้องการบันทึก
+# download_url = "https://drive.google.com/uc?id=17vHFgWgYdq7ba8U6I_YKrCUyVXrehoAl&export=download"
+# save_path = "qr_image.jpg"  # เส้นทางที่ต้องการบันทึก
 # download_file_from_google_drive(download_url, save_path)
