@@ -289,7 +289,7 @@ def show_category_menu():
     print("💬 4. Discord")
     print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
-    print("🚪 00. ให้กำลังใจ")
+    print("🚪 100. ให้กำลังใจ")
 
 # ลูปหลัก
 while True:
@@ -313,7 +313,7 @@ while True:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
             show_order_history(username)
-        elif category_choice == 00:
+        elif category_choice == 100:
             download_file_from_google_drive(download_url, save_path)
         
         else:
