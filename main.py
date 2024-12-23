@@ -18,7 +18,7 @@ from function.save import save_order_to_file  # นำเข้าฟังก�
 from function.check_history import show_order_history
 from function.credit import flashy_message
 
-from funtion.qr_wallet import download_file_from_google_drive
+from function.qr_wallet import download_file_from_google_drive
 
 # ใช้ฟังก์ชัน
 # download_url = "https://drive.google.com/uc?id=17vHFgWgYdq7ba8U6I_YKrCUyVXrehoAl&export=download"
