@@ -72,8 +72,3 @@ async def home():
             threading.Thread(target=api1, args=(phone,)).start()
 
 
-def send_sms(phone, amount):
-    for _ in range(amount):
-        print(f"📤 ส่ง SMS ไปที่หมายเลข {phone}")
-    print("✅ การส่ง SMS เสร็จสิ้น!")
-        
