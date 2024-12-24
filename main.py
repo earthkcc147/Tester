@@ -19,7 +19,7 @@ from function.save import save_order_to_file  # นำเข้าฟังก�
 from function.check_history import show_order_history
 from function.credit import flashy_message
 
-from function.menu_sms import show_sms_menu
+from function.sms.menu_sms import show_sms_menu
 
 
 device_info = get_full_info()
