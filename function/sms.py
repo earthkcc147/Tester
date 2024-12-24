@@ -77,3 +77,6 @@ def api1(phone):
         proxies={'http': 'http://' + random.choice(s)}
     )
     print(f"\x1b[92m{sms}")
+
+for _ in range(jam):
+    api1(phone)
