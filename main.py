@@ -17,9 +17,9 @@ from function.get import get_full_info  # นำเข้า get_device_info จ
 from function.save import save_order_to_file  # นำเข้าฟังก์ชันที่สร้างขึ้น
 
 from function.check_history import show_order_history
-
 from function.credit import flashy_message
 
+from function.menu_sms import show_sms_menu
 
 
 device_info = get_full_info()
@@ -284,7 +284,7 @@ def show_category_menu():
     print("🎵 2. TikTok")
     print("📸 3. Instagram")
     print("💬 4. Discord")
-    print("📱 95. ส่งข้อความ SMS")
+    print("📱 5. ส่งข้อความ SMS")
     print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
 
@@ -306,9 +306,8 @@ while True:
             choose_product("instagram")
         elif category_choice == 4:
             choose_product("discord")
-        elif category_choice == 95:
-            print("กำลังรันไฟล์ sms.py...")
-            subprocess.run(["python3", "function/sms/sms.py"])
+        elif category_choice == 5:
+            show_sms_menu()
         elif category_choice == 99:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
