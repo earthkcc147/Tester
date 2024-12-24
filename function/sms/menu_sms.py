@@ -1,3 +1,11 @@
+def clear_console():
+    # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Linux หรือ macOS หรือ Termux
+        os.system('clear')
+
+
 # เมนู SMS
 def show_sms_menu():
     while True:
