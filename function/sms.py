@@ -47,7 +47,6 @@ async def home():
         os.system('clear')
     else:
         jam = int(input("\x1b[96m [AMOUNT-ATTACK] : \x1b[92m"))
-        return phone, jam
         print()
         print()
 
@@ -78,6 +77,3 @@ def api1(phone):
         proxies={'http': 'http://' + random.choice(s)}
     )
     print(f"\x1b[92m{sms}")
-
-for _ in range(jam):
-    api1(phone)
