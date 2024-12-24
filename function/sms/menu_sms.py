@@ -1,3 +1,6 @@
+import requests
+import os
+
 def clear_console():
     # ตรวจสอบว่ากำลังทำงานในระบบปฏิบัติการใด
     if os.name == 'nt':  # Windows
