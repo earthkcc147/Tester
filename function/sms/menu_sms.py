@@ -3,7 +3,7 @@ def show_sms_menu():
     while True:
         clear_console()
         print("\n📱 --- เมนู SMS --- 📱\n")
-        print("1. sms")
+        print("1. sms 42 api")
         print("00. ย้อนกลับ")
 
         try:
