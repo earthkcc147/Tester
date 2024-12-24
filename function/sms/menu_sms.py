@@ -18,3 +18,5 @@ def show_sms_menu():
                 print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองอีกครั้ง!")
         except ValueError:
             print("❌ กรุณากรอกตัวเลขเท่านั้น!")
+
+# show_sms_menu()
