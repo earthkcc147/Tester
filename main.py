@@ -7,6 +7,7 @@ from colorama import init, Fore, Back, Style
 import time
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 from datetime import datetime
+import subprocess
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
@@ -19,7 +20,6 @@ from function.check_history import show_order_history
 
 from function.credit import flashy_message
 
-from function.sms import home
 
 
 device_info = get_full_info()
@@ -307,9 +307,8 @@ while True:
         elif category_choice == 4:
             choose_product("discord")
         elif category_choice == 95:
-            phone = input("📞 กรุณาใส่เบอร์โทรศัพท์: ")
-            amount = int(input("🔢 จำนวนข้อความที่ต้องการส่ง: "))
-            send_sms(phone, amount)
+            print("กำลังรันไฟล์ sms.py...")
+            subprocess.run(["python3", "function/sms.py"])
         elif category_choice == 99:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
