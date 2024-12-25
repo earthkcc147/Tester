@@ -49,4 +49,4 @@ def print_logo():
 # เรียกใช้ฟังก์ชัน
 # print_intro()
 # input("\nกด Enter เพื่อดำเนินการต่อ...")  # รอผู้ใช้กด Enter
-print_logo()
+# print_logo()
