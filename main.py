@@ -21,6 +21,7 @@ from function.check_history import show_order_history
 from function.credit import flashy_message
 
 from function.sms.menu_sms import show_sms_menu
+from function.start import print_intro
 
 
 device_info = get_full_info()
@@ -82,6 +83,9 @@ def login_screen():
 
 # เรียกใช้ฟังก์ชันเคลียร์คอนโซล
 clear_console()
+
+print_intro()
+input("\nกด Enter เพื่อดำเนินการต่อ...")  # รอผู้ใช้กด Enter
 
 # แสดงหน้าล็อคอิน
 login_screen()
