@@ -280,15 +280,40 @@ def choose_product(category):
     except ValueError:
         print("❌ กรุณากรอกตัวเลขเท่านั้น!")
 
-# เมนูหลัก
-def show_category_menu():
-    balance = get_balance(api_key)
+import mysql.connector
+from mysql.connector import Error
+
+# เชื่อมต่อฐานข้อมูล
+def get_balance(username):
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="zfsplszw_gumarun",
+            password="212224236.Gmr",
+            database="zfsplszw_gmr"
+        )
+
+        if connection.is_connected():
+            cursor = connection.cursor(dictionary=True)
+            query = "SELECT point FROM pp_users WHERE username = %s"
+            cursor.execute(query, (username,))
+            user_data = cursor.fetchone()
+            return user_data['point'] if user_data else None
+
+    except Error as e:
+        print(f"❌ เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล: {e}")
+        return None
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+# ฟังก์ชันแสดงเมนู
+def show_category_menu(username):
+    balance = get_balance(username)
     if balance is not None:
-        adjusted_balance = round(balance * BM, 2)
-        clear_console()
-        print_logo()
-        flashy_message()
-        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
+        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {balance:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
 
@@ -300,32 +325,16 @@ def show_category_menu():
     print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
 
-# ลูปหลัก
+# ตัวอย่างการเรียกใช้งาน
+username = "your_username"  # ระบุชื่อผู้ใช้
 while True:
-    show_category_menu()
+    show_category_menu(username)
     try:
-        category_choice = int(input("\n🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
-
-        if category_choice == 0:
-            clear_console()
+        choice = int(input("\n🔔 กรุณาเลือกหมวดหมู่สินค้า: "))
+        if choice == 0:
             print("👋 ออกจากโปรแกรม เรียบร้อยแล้ว!")
             break
-        elif category_choice == 1:
-            choose_product("facebook")
-        elif category_choice == 2:
-            choose_product("tiktok")
-        elif category_choice == 3:
-            choose_product("instagram")
-        elif category_choice == 4:
-            choose_product("discord")
-        elif category_choice == 5:
-            show_sms_menu()
-        elif category_choice == 99:
-            # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
-            # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
-            show_order_history(username)
-
         else:
-            print("❌ ตัวเลือกไม่ถูกต้อง กรุณาลองอีกครั้ง!")
+            print(f"เลือกหมวดหมู่ที่ {choice}")
     except ValueError:
         print("❌ กรุณากรอกตัวเลขเท่านั้น!")
