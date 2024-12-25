@@ -21,7 +21,7 @@ from function.check_history import show_order_history
 from function.credit import flashy_message
 
 from function.sms.menu_sms import show_sms_menu
-from function.start import print_intro, print_logo()
+from function.start import print_intro, print_logo
 
 
 device_info = get_full_info()
