@@ -86,6 +86,7 @@ clear_console()
 
 print_intro()
 input("\nกด Enter เพื่อดำเนินการต่อ...")  # รอผู้ใช้กด Enter
+clear_console()
 
 # แสดงหน้าล็อคอิน
 login_screen()
