@@ -7,6 +7,8 @@ from colorama import init, Fore, Back, Style
 import time
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 from datetime import datetime
+import subprocess
+import pyfiglet
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
@@ -16,8 +18,10 @@ from function.get import get_full_info  # นำเข้า get_device_info จ
 from function.save import save_order_to_file  # นำเข้าฟังก์ชันที่สร้างขึ้น
 
 from function.check_history import show_order_history
-
 from function.credit import flashy_message
+
+from function.sms.menu_sms import show_sms_menu
+from function.start import print_intro, print_logo
 
 
 device_info = get_full_info()
@@ -74,15 +78,24 @@ def login_screen():
     print(Fore.MAGENTA + Style.BRIGHT + "         ระบบล็อคอิน")
     print(Fore.CYAN + "="*40)
     print(Fore.WHITE + "ติดต่อแอดมินเพื่อสมัครสมาชิก\n   https://www.facebook.com/earthkcc147?mibextid=ZbWKwL\n")
-    print(Fore.WHITE + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
+
 
 
 # เรียกใช้ฟังก์ชันเคลียร์คอนโซล
 clear_console()
 
+print_intro()
+input("\nกด Enter เพื่อดำเนินการต่อ...")  # รอผู้ใช้กด Enter
+clear_console()
+
 # แสดงหน้าล็อคอิน
 login_screen()
 
+# ใช้ pyfiglet ในการแสดงแบนเนอร์ในรูปแบบตัวอักษรสวยๆ
+ascii_banner = pyfiglet.figlet_format("LOGIN", font="slant")
+print(Fore.YELLOW + ascii_banner)
+
+print(Fore.GREEN + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 # รับ username และ password จากผู้ใช้
 username = input(Fore.YELLOW + "กรุณากรอก Username: ")
 # รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
@@ -273,6 +286,7 @@ def show_category_menu():
     if balance is not None:
         adjusted_balance = round(balance * BM, 2)
         clear_console()
+        print_logo()
         flashy_message()
         print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
@@ -282,6 +296,7 @@ def show_category_menu():
     print("🎵 2. TikTok")
     print("📸 3. Instagram")
     print("💬 4. Discord")
+    print("📱 5. ส่งข้อความ SMS")
     print("🔍 99. ดูประวัติการสั่งซื้อ")
     print("🚪 0. ออกจากโปรแกรม")
 
@@ -303,6 +318,8 @@ while True:
             choose_product("instagram")
         elif category_choice == 4:
             choose_product("discord")
+        elif category_choice == 5:
+            show_sms_menu()
         elif category_choice == 99:
             # กรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ
             # username = input("🔍 กรุณากรอกชื่อผู้ใช้เพื่อดูประวัติการสั่งซื้อ: ")
