@@ -25,7 +25,7 @@ def center_text(text):
     return centered_text
 
 # สร้างข้อความ ASCII art ด้วย pyfiglet
-intro = pyfiglet.figlet_format("Welcome\nTo\nGumarun Store", font="cybermedium")
+intro = pyfiglet.figlet_format("Welcome\nTo\nGumarun Store", font="cybermedium", width=80)
 
 # ฟังก์ชันแสดงข้อความพร้อมดีเลย์
 def print_intro():
