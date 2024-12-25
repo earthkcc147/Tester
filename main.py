@@ -8,6 +8,7 @@ import time
 from getpass import getpass  # เพิ่มการใช้งาน getpass
 from datetime import datetime
 import subprocess
+import pyfiglet
 
 from send.discord import send_discord_message, get_current_time
 from send.line import send_line_message, get_current_time
@@ -84,6 +85,10 @@ clear_console()
 
 # แสดงหน้าล็อคอิน
 login_screen()
+
+# ใช้ pyfiglet ในการแสดงแบนเนอร์ในรูปแบบตัวอักษรสวยๆ
+ascii_banner = pyfiglet.figlet_format("LOGIN", font="slant")
+print(Fore.YELLOW + ascii_banner)
 
 # รับ username และ password จากผู้ใช้
 username = input(Fore.YELLOW + "กรุณากรอก Username: ")
