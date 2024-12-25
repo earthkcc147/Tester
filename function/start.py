@@ -30,7 +30,7 @@ def print_logo():
                                            
     > Gumarun Store ©
     '''
-    print(banner)
+    # print(banner)
 
 # เรียกใช้ฟังก์ชัน
 # print_intro()
