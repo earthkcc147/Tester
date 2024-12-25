@@ -3,7 +3,8 @@
 import os
 import time
 import pyfiglet
-from colorama import init, Fore
+import shutil
+from colorama import init, Fore, Style
 
 # เริ่มต้นการใช้งาน colorama
 init()
@@ -18,7 +19,26 @@ def print_intro():
         time.sleep(0.1)  # เพิ่มดีเลย์เพื่อจำลองแอนิเมชัน
 
 
+# ฟังก์ชันสำหรับจัดข้อความให้อยู่ตรงกลาง
+def center_text(text):
+    # ดึงขนาดหน้าจอ
+    terminal_size = shutil.get_terminal_size()
+    terminal_width = terminal_size.columns
+
+    # แยกข้อความเป็นบรรทัดๆ
+    lines = text.splitlines()
+
+    centered_text = ""
+    for line in lines:
+        # คำนวณพื้นที่ว่างด้านซ้ายเพื่อให้อยู่ตรงกลาง
+        centered_line = line.center(terminal_width)
+        centered_text += centered_line + "\n"
+    
+    return centered_text
+
+# ฟังก์ชันสำหรับแสดงโลโก้
 def print_logo():
+    # เคลียร์หน้าจอ
     os.system('cls' if os.name == 'nt' else 'clear')
     banner = '''
    )   (          (        (    )   
@@ -30,7 +50,9 @@ def print_logo():
                                            
     > Gumarun Store ©
     '''
-    print(banner)
+    # แสดงโลโก้ตรงกลางด้วยสีแดงและสไตล์ตัวหนา
+    print(center_text(Fore.RED + Style.BRIGHT + banner))
+
 
 # เรียกใช้ฟังก์ชัน
 # print_intro()
