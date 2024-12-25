@@ -21,7 +21,7 @@ from function.check_history import show_order_history
 from function.credit import flashy_message
 
 from function.sms.menu_sms import show_sms_menu
-from function.start import print_intro
+from function.start import print_intro, print_logo()
 
 
 device_info = get_full_info()
@@ -286,6 +286,7 @@ def show_category_menu():
     if balance is not None:
         adjusted_balance = round(balance * BM, 2)
         clear_console()
+        print_logo()
         flashy_message()
         print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
