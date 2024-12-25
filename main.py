@@ -90,7 +90,7 @@ login_screen()
 ascii_banner = pyfiglet.figlet_format("LOGIN", font="slant")
 print(Fore.YELLOW + ascii_banner)
 
-print(Fore.YELLOW + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
+print(Fore.GREEN + "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ")
 # รับ username และ password จากผู้ใช้
 username = input(Fore.YELLOW + "กรุณากรอก Username: ")
 # รับ password โดยใช้ getpass เพื่อซ่อนรหัสผ่าน
