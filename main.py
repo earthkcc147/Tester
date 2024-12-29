@@ -135,6 +135,15 @@ def get_balance(api_k):
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
     return None
 
+
+# ดึงยอดเงินของผู้ใช้จาก USERS_JSON
+def get_user_balance(username):
+    try:
+        return users_data[username]['balance']
+    except KeyError:
+        print(Fore.RED + "ไม่สามารถดึงยอดเงินได้ ❌")
+        return None
+
 # ฟังก์ชันการสั่งซื้อสินค้า
 def place_order(category, product_key, quantity, link):
     product = products[category][product_key]
