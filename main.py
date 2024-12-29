@@ -166,13 +166,20 @@ def place_order(category, product_key, quantity, link):
 
     balance = get_balance(api_key)
     if balance is None:
+        print("ไม่สามารถดึงยอดเงิน api ได้ ❌")
+        return
+
+    # ดึงยอดเงินจาก USERS_JSON
+    bl = get_user_balance(username)
+    if balance is None:
         print("ไม่สามารถดึงยอดเงินได้ ❌")
         return
 
-    # คูณยอดเงินด้วยตัวคูณ
-    adjusted_balance = round(balance * BM, 2)
+    if total_price > balance:
+        print(f"ยอดเงิน api ไม่เพียงพอในการซื้อสินค้า {product['description']} ❌")
+        return
 
-    if total_price > adjusted_balance:
+    if total_price > bl:
         print(f"ยอดเงินไม่เพียงพอในการซื้อสินค้า {product['description']} ❌")
         return
 
@@ -183,7 +190,7 @@ def place_order(category, product_key, quantity, link):
     print(f"💵 ราคาต่อหน่วย: {price_per_rate:.2f} บาท (💱 rate: {rate})")
     print(f"💰 ราคาทั้งหมด: {total_price:.2f} บาท")
     print(f"🔗 ลิงก์ที่กรอก: {link}")
-    print(f"💳 เครดิตที่คุณมี: {adjusted_balance:.2f} บาท")
+    print(f"💳 เครดิตที่คุณมี: {bl:.2f} บาท")
 
     # การยืนยันการสั่งซื้อ
     confirm = input("\n✅ คุณต้องการยืนยันการสั่งซื้อหรือไม่? (y/n): ").lower()
@@ -205,7 +212,7 @@ def place_order(category, product_key, quantity, link):
         if response_order.status_code == 200:
             order_data = response_order.json()
             if 'order' in order_data:
-                remaining_balance = round(adjusted_balance - total_price, 2)
+                remaining_balance = round(bl - total_price, 2)
                 print(f"\nการสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
@@ -291,13 +298,13 @@ def choose_product(category):
 
 # เมนูหลัก
 def show_category_menu():
-    balance = get_user_balance(username)  # ดึงยอดเงินของผู้ใช้
+    bl = get_user_balance(username)  # ดึงยอดเงินของผู้ใช้
     if balance is not None:
         
         clear_console()
         print_logo()
         flashy_message()
-        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {balance:.2f} บาท 💳\n")
+        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {bl:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
 
