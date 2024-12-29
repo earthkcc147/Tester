@@ -319,8 +319,7 @@ def choose_product(category):
 # เมนูหลัก
 def show_category_menu():
     bl = get_user_balance(username)  # ดึงยอดเงินของผู้ใช้
-    if balance is not None:
-        
+    if bl is not None:
         clear_console()
         print_logo()
         flashy_message()
