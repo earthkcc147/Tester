@@ -139,7 +139,7 @@ def get_balance(api_k):
 # ดึงยอดเงินของผู้ใช้จาก USERS_JSON
 def get_user_balance(username):
     try:
-        return users_data[username]['balance']
+        return users_data[username]['bl']
     except KeyError:
         print(Fore.RED + "ไม่สามารถดึงยอดเงินได้ ❌")
         return None
