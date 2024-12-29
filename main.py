@@ -144,7 +144,26 @@ def get_user_balance(username):
         print(Fore.RED + "ไม่สามารถดึงยอดเงินได้ ❌")
         return None
 
-# ฟังก์ชันการสั่งซื้อสินค้า
+def update_user_balance_in_env(username, new_balance):
+    try:
+        # ตรวจสอบว่าผู้ใช้มีอยู่ใน users_data หรือไม่
+        if username in users_data:
+            # อัปเดตยอดเงินของผู้ใช้
+            users_data[username]['bl'] = new_balance
+
+            # บันทึกข้อมูล users_data ลงใน .env
+            os.environ['USERS'] = json.dumps(users_data)
+
+            # บันทึกข้อมูลกลับไปยังไฟล์ .env
+            with open('.env', 'w') as env_file:
+                for key, value in os.environ.items():
+                    env_file.write(f"{key}={value}\n")
+            print(f"อัปเดตยอดเงินของ {username} สำเร็จ")
+        else:
+            print(f"ไม่พบผู้ใช้ {username} ในฐานข้อมูล ❌")
+    except Exception as e:
+        print(f"ไม่สามารถอัปเดตยอดเงินได้: {e} ❌")
+
 def place_order(category, product_key, quantity, link):
     product = products[category][product_key]
     min_quantity = product['min_quantity']
@@ -171,7 +190,7 @@ def place_order(category, product_key, quantity, link):
 
     # ดึงยอดเงินจาก USERS_JSON
     bl = get_user_balance(username)
-    if balance is None:
+    if bl is None:
         print("ไม่สามารถดึงยอดเงินได้ ❌")
         return
 
@@ -217,6 +236,9 @@ def place_order(category, product_key, quantity, link):
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
 
+                # อัปเดตยอดเงินของผู้ใช้ใน .env
+                update_user_balance_in_env(username, remaining_balance)
+
                 # ข้อความที่รวมข้อมูลต่างๆไปที่ Line
                 message = (
                     f"🎉 การสั่งซื้อสำเร็จ! 🎉\n"
@@ -243,8 +265,6 @@ def place_order(category, product_key, quantity, link):
                     "remaining_balance": remaining_balance,
                     "timestamp": current_time,
                 })
-
-
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
         else:
