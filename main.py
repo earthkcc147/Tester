@@ -135,35 +135,7 @@ def get_balance(api_k):
         print(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e} ❌")
     return None
 
-
-# ดึงยอดเงินของผู้ใช้จาก USERS_JSON
-def get_user_balance(username):
-    try:
-        return users_data[username]['bl']
-    except KeyError:
-        print(Fore.RED + "ไม่สามารถดึงยอดเงินได้ ❌")
-        return None
-
-def update_user_balance_in_env(username, new_balance):
-    try:
-        # ตรวจสอบว่าผู้ใช้มีอยู่ใน users_data หรือไม่
-        if username in users_data:
-            # อัปเดตยอดเงินของผู้ใช้
-            users_data[username]['bl'] = new_balance
-
-            # บันทึกข้อมูล users_data ลงใน .env
-            os.environ['USERS'] = json.dumps(users_data)
-
-            # บันทึกข้อมูลกลับไปยังไฟล์ .env
-            with open('.env', 'w') as env_file:
-                for key, value in os.environ.items():
-                    env_file.write(f"{key}={value}\n")
-            print(f"อัปเดตยอดเงินของ {username} สำเร็จ")
-        else:
-            print(f"ไม่พบผู้ใช้ {username} ในฐานข้อมูล ❌")
-    except Exception as e:
-        print(f"ไม่สามารถอัปเดตยอดเงินได้: {e} ❌")
-
+# ฟังก์ชันการสั่งซื้อสินค้า
 def place_order(category, product_key, quantity, link):
     product = products[category][product_key]
     min_quantity = product['min_quantity']
@@ -185,20 +157,13 @@ def place_order(category, product_key, quantity, link):
 
     balance = get_balance(api_key)
     if balance is None:
-        print("ไม่สามารถดึงยอดเงิน api ได้ ❌")
-        return
-
-    # ดึงยอดเงินจาก USERS_JSON
-    bl = get_user_balance(username)
-    if bl is None:
         print("ไม่สามารถดึงยอดเงินได้ ❌")
         return
 
-    if total_price > balance:
-        print(f"ยอดเงิน api ไม่เพียงพอในการซื้อสินค้า {product['description']} ❌")
-        return
+    # คูณยอดเงินด้วยตัวคูณ
+    adjusted_balance = round(balance * BM, 2)
 
-    if total_price > bl:
+    if total_price > adjusted_balance:
         print(f"ยอดเงินไม่เพียงพอในการซื้อสินค้า {product['description']} ❌")
         return
 
@@ -209,7 +174,7 @@ def place_order(category, product_key, quantity, link):
     print(f"💵 ราคาต่อหน่วย: {price_per_rate:.2f} บาท (💱 rate: {rate})")
     print(f"💰 ราคาทั้งหมด: {total_price:.2f} บาท")
     print(f"🔗 ลิงก์ที่กรอก: {link}")
-    print(f"💳 เครดิตที่คุณมี: {bl:.2f} บาท")
+    print(f"💳 เครดิตที่คุณมี: {adjusted_balance:.2f} บาท")
 
     # การยืนยันการสั่งซื้อ
     confirm = input("\n✅ คุณต้องการยืนยันการสั่งซื้อหรือไม่? (y/n): ").lower()
@@ -231,13 +196,10 @@ def place_order(category, product_key, quantity, link):
         if response_order.status_code == 200:
             order_data = response_order.json()
             if 'order' in order_data:
-                remaining_balance = round(bl - total_price, 2)
+                remaining_balance = round(adjusted_balance - total_price, 2)
                 print(f"\nการสั่งซื้อสำเร็จ! คำสั่งซื้อ ID: {order_data['order']} ✅")
                 print(f"รวมราคาทั้งหมด: {total_price:.2f} บาท 💵")
                 print(f"เครดิตที่เหลือหลังจากการสั่งซื้อ: {remaining_balance:.2f} บาท 💳")
-
-                # อัปเดตยอดเงินของผู้ใช้ใน .env
-                update_user_balance_in_env(username, remaining_balance)
 
                 # ข้อความที่รวมข้อมูลต่างๆไปที่ Line
                 message = (
@@ -265,6 +227,8 @@ def place_order(category, product_key, quantity, link):
                     "remaining_balance": remaining_balance,
                     "timestamp": current_time,
                 })
+
+
             else:
                 print("การสั่งซื้อไม่สำเร็จ ❌")
         else:
@@ -282,7 +246,7 @@ def choose_product(category):
     print(f"\n🎯 --- รายการสินค้าในหมวด {category.upper()} --- 🎯")
     for index, (product_name, details) in enumerate(category_products.items(), start=1):
         print(f"\n✨ {index}. {details['description']} ✨")
-        print(f"   💵 ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['rate']} ชิ้น")
+        print(f"   💵 ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']} ชิ้น")
         print(f"   📦 จำนวนขั้นต่ำ: {details['min_quantity']} ชิ้น")
         print(f"   📦 จำนวนสูงสุด: {details['max_quantity']} ชิ้น")
         if 'example_link' in details:
@@ -318,12 +282,13 @@ def choose_product(category):
 
 # เมนูหลัก
 def show_category_menu():
-    bl = get_user_balance(username)  # ดึงยอดเงินของผู้ใช้
-    if bl is not None:
+    balance = get_balance(api_key)
+    if balance is not None:
+        adjusted_balance = round(balance * BM, 2)
         clear_console()
         print_logo()
         flashy_message()
-        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {bl:.2f} บาท 💳\n")
+        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
 
