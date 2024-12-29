@@ -282,7 +282,7 @@ def choose_product(category):
     print(f"\n🎯 --- รายการสินค้าในหมวด {category.upper()} --- 🎯")
     for index, (product_name, details) in enumerate(category_products.items(), start=1):
         print(f"\n✨ {index}. {details['description']} ✨")
-        print(f"   💵 ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['min_quantity']} ชิ้น")
+        print(f"   💵 ราคา: {details['price_per_rate']:.2f} บาท ต่อ {details['rate']} ชิ้น")
         print(f"   📦 จำนวนขั้นต่ำ: {details['min_quantity']} ชิ้น")
         print(f"   📦 จำนวนสูงสุด: {details['max_quantity']} ชิ้น")
         if 'example_link' in details:
