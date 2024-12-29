@@ -291,13 +291,13 @@ def choose_product(category):
 
 # เมนูหลัก
 def show_category_menu():
-    balance = get_balance(api_key)
+    balance = get_user_balance(username)  # ดึงยอดเงินของผู้ใช้
     if balance is not None:
-        adjusted_balance = round(balance * BM, 2)
+        
         clear_console()
         print_logo()
         flashy_message()
-        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {adjusted_balance:.2f} บาท 💳\n")
+        print(f"\n🎉 --- เมนูหลัก --- 🎉 ยอดเงิน: {balance:.2f} บาท 💳\n")
     else:
         print("\n🎉 --- เมนูหลัก --- 🎉 ไม่สามารถดึงยอดเงินได้ ❗\n")
 
