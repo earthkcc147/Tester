@@ -57,5 +57,5 @@ def send(username):
     smdc(message)
 
 # ตัวอย่างการเรียกใช้ฟังก์ชัน
-# send("example_user")
+# send(username)
 
